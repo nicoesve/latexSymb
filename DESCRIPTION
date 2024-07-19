@@ -1,0 +1,10 @@
+Package: latexSymb
+Type: Package
+Title: Use R to write LaTeX code
+Version: 0.1.0
+Date: 2024-07-19
+Author: Nicolas Escobar
+Description: A simple S3 class and methods that facilitate the writing of LaTeX code in dynamic documents.
+Maintainer: Nicolas Escobar <nescoba@iu.edu>
+License: GPL(>= 2)
+
