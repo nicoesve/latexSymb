@@ -1,0 +1,17 @@
+\name{-}
+\alias{-}
+\title{Masking the addition operator to work with latex_symb objects}
+\usage{
+e1 - e2
+}
+\arguments{
+\item{e1}{An object}
+
+\item{e2}{An object}
+}
+\value{
+A latex_symb object if one of the arguments is a latex_symb object. Its representation is the representation of the first argument concatenated with a minus sign and the representation of the second argument. Otherwise, the base addition operator is called.
+}
+\description{
+Masking the addition operator to work with latex_symb objects
+}
