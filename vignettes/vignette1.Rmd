@@ -40,26 +40,28 @@ And then when you need it in your `.Rmd` document, you just write `` `r il(rv1)`
 To encode the operations, you'd use R functions:
 ```{r}
 bivec <- function(rv1, rv2){
-    lsymb("\\vec{", as.character(rv1), as.character(rv2), "}")
+    lsymb("\\vec{", rv1, rv2, "}")
 }
 Vect <- function(rv1, rv2){
     lsymb(
         "\\operatorname{Vec}_{", 
-        as.character(rv1), 
+        rv1, 
         "}(",
         bivec(rv1, rv2),
         ")"
     )
 } 
-t.latexSymb <- function(x){
-    lsymb(as.character(x), "^T")
+t.latex_symb <- function(x){
+    lsymb(x, "^T")
 }
 ```
-(you could also just write 
+You could also just write 
+
 ```{r}
-bivec <- function(rv1, rv2) "\\vec{" * rv1$repr * rv2$repr * "}"
+bivec <- function(rv1, rv2) "\\vec{" * rv1 * rv2 * "}"
 ```
-if you know you'll only use the function with `latex_symb` objects).
+
+if you know you'll only use the function with `latex_symb` objects.
 
 Then you just write `` `r bivec(rv1, rv2)` `` and `` `r Vect(rv1, rv2)` `` and 
 `` `r t(Vect(rv1, rv2))*Vect(rv1, rv2)` `` inside math environments.
@@ -69,15 +71,6 @@ Notice that R's `*` function is overwritten to return an object of class `latex_
 About the second reason, I personally like using pipes to deal with that issue. 
 I'd write `` `r Vect(rv1, rv2) |> (\(x) t(x)*x)()` ``. 
 Whether you consider this more readable is a matter of taste. 
-
-One last trick has to do with the fact that it is very common to subset mathematical symbols with some kind of index. 
-To deal with this, `latex_symb` objects have an `index` function that does just that. 
-So for instance, 
-
-```{r}
-al <- lsymb("\\alpha")
-al$index(0)
-```
 
 Overall, is this less work than writing the LaTeX code? 
 Probably not. 
@@ -89,7 +82,4 @@ I just don't think that a lot of people do that.
 The package is intentionally bare-bones. 
 You're encouraged to write you're own functions. 
 LaTeX is powerful because of its flexibility and I want to go with that. 
-
-
-
 

@@ -2,17 +2,13 @@
 #'
 #' @param ... One or more R objects, which get transformed into characters and then pasted to create the `LaTeX` code for the symbol.
 #' @return An object of the S3 class `latex_symb`. 
-#' It is basically a list with two components. 
-#' The first is `repr`, a string with the latex code for the symbol.
-#' The second is `index`, a function that accepts an argument `i` and returns the symbol with `i` as a subscript.
 #' @export
 #' @examples 
 #' al <- lsymb("\\alpha")
-#' al$index(1)
+#' al$repr
 lsymb <- function(...){
     result <- paste(...)
-    fun <- function(i) paste0(result, "_{", as.character(i), "}")
-    x <- list(repr = result, index = fun)
+    x <- list(repr = result)
     class(x) <- "latex_symb"
     return(x)
 }
@@ -24,7 +20,7 @@ lsymb <- function(...){
 #' @return A character string with the `LaTeX` code for the symbol.
 #' @export
 #' @examples
-#' as.character(latex_symb("\\alpha"))
+#' as.character(lsymb("\\alpha"))
 as.character.latex_symb <- function(x, ...){
     x$repr
 }
@@ -41,7 +37,7 @@ as.character.latex_symb <- function(x, ...){
 #' e1 + e2
 `+` <- function(e1, e2){
     if(inherits(e1, "latex_symb") || inherits(e2, "latex_symb")){
-        return(latex_symb(paste(as.character(e1), "+", as.character(e2))))
+        return(lsymb(paste(e1, "+", e2)))
     } else {
         return(base::`+`(e1, e2))
     }
@@ -59,7 +55,7 @@ as.character.latex_symb <- function(x, ...){
 #' e1 * e2
 `*` <- function(e1, e2){
     if(inherits(e1, "latex_symb") || inherits(e2, "latex_symb")){
-        return(latex_symb(paste(as.character(e1), as.character(e2))))
+        return(lsymb(paste(e1, e2)))
     } else {
         return(base::`*`(e1, e2))
     }
@@ -77,7 +73,7 @@ as.character.latex_symb <- function(x, ...){
 #' e1 / e2
 `/` <- function(e1, e2){
     if(inherits(e1, "latex_symb") || inherits(e2, "latex_symb")){
-        return(lsymb(paste("\\frac{", as.character(e1), "}{", as.character(e2), "}")))
+        return(lsymb(paste("\\frac{", e1, "}{", e2, "}")))
     } else {
         return(base::`/`(e1, e2))
     }
@@ -95,7 +91,7 @@ as.character.latex_symb <- function(x, ...){
 #' e1 - e2
 `-` <- function(e1, e2){
     if(inherits(e1, "latex_symb") || inherits(e2, "latex_symb")){
-        return(lsymb(paste(as.character(e1), " - ", as.character(e2))))
+        return(lsymb(paste(e1, " - ", e2)))
     } else {
         return(base::`-`(e1, e2))
     }
@@ -113,7 +109,7 @@ as.character.latex_symb <- function(x, ...){
 #' e1 ^ e2
 `^` <- function(e1, e2){
     if(inherits(e1, "latex_symb") || inherits(e2, "latex_symb")){
-        return(lsymb(paste(as.character(e1), "^{", as.character(e2), "}")))
+        return(lsymb(paste(e1, "^{", e2, "}")))
     } else {
         return(base::`^`(e1, e2))
     }
@@ -128,7 +124,7 @@ as.character.latex_symb <- function(x, ...){
 #' e1 <- lsymb("\\alpha")
 #' pths(e1)
 pths <- function(expr){
-    lsymb(paste("\\left(", as.character(expr), "\\right)"))
+    lsymb(paste("\\left(", expr, "\\right)"))
 }
 
 #' Function that creates a `latex_symb` object consisting of its argument enclosed in braces
@@ -140,7 +136,7 @@ pths <- function(expr){
 #' e1 <- lsymb("\\alpha")
 #' braces(e1)
 braces <- function(expr){
-    lsymb(paste("\\lbrace", as.character(expr), "\\rbrace"))
+    lsymb(paste("\\lbrace", expr, "\\rbrace"))
 }
 
 #' Function that wraps a `latex_symb` object in dollar signs to be interpreted as inline math by `LaTeX`. 
@@ -152,7 +148,7 @@ braces <- function(expr){
 #' e1 <- lsymb("\\alpha")
 #' il(e1)
 il <- function(expr){
-    paste("$", as.character(expr), "$")
+    paste("$", expr, "$")
 }
 
 #' Prints the `LaTeX` representation of a `latex_symb` object

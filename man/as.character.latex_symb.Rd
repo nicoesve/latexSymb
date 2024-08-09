@@ -18,5 +18,5 @@ A character string with the `LaTeX` code for the symbol.
 Function that converts a `latex_symb` object to a character string
 }
 \examples{
-as.character(latex_symb("\\\\alpha"))
+as.character(lsymb("\\\\alpha"))
 }

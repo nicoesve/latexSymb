@@ -10,15 +10,12 @@ lsymb(...)
 \item{...}{One or more R objects, which get transformed into characters and then pasted to create the `LaTeX` code for the symbol.}
 }
 \value{
-An object of the S3 class `latex_symb`. 
-It is basically a list with two components. 
-The first is `repr`, a string with the latex code for the symbol.
-The second is `index`, a function that accepts an argument `i` and returns the symbol with `i` as a subscript.
+An object of the S3 class `latex_symb`.
 }
 \description{
 Function that creates a `latex_symb` object
 }
 \examples{
 al <- lsymb("\\\\alpha")
-al$index(1)
+al$repr
 }

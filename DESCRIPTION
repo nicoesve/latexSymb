@@ -3,9 +3,9 @@ Type: Package
 Title: Use R to Write 'LaTeX' Code
 Version: 0.2.0
 Date: 2024-08-08
-Authors@R: c(person("Nicolas", "Escobar", role = c("auth", "cre"), email = "nescoba@iu.edu"))
+Authors@R: c(person("Nicolas", "Escobar", role = c("aut", "cre"), email = "nescoba@iu.edu"))
 Author: Nicolas Escobar [aut, cre]
-Maintainter: Nicolas Escobar <nescoba@iu.edu>
+Maintainer: Nicolas Escobar <nescoba@iu.edu>
 Description: Simplify the task of writing 'LaTeX' code by using R. Instead of using 'LaTeX' utilities like 'newcommand', write R functions for more flexibility and readability. Also, R's piping and additional support for grouping make it easier to write complex expressions.
 License: GPL(>= 2)
 Encoding: UTF-8
