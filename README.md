@@ -7,9 +7,9 @@ If the math that you're trying to write is not trivial, then the code can become
 On top of that, it is annoying to have to switch between writing R and LaTeX code on the same document.
 
 For instance, consider writing the expression 
-    $$
-        \operatorname{Vec}_{\Sigma^\ast}(\vec{\Sigma \Lambda})^T \operatorname{Vec}_{\Sigma^\ast}(\vec{\Sigma \Lambda})
-    $$
+$$
+    \operatorname{Vec}_{\Sigma^\ast}(\vec{\Sigma \Lambda})^T \operatorname{Vec}_{\Sigma^\ast}(\vec{\Sigma \Lambda})
+$$
 which is encountered in the study of Riemannian-manifold-valued random variables ($\Sigma$ and $\Lambda$ being the random variables).
 
 Not only is it cumbersome, it is very hard to read without compiling to PDF. I'd argue there are two reasons for that:
@@ -60,15 +60,6 @@ Notice that R's `*` function is overwritten to return an object of class `latex_
 About the second reason, I personally like using pipes to deal with that issue. 
 I'd write `` `r Vect(rv1, rv2) |> (\(x) t(x)*x)()` ``. 
 Whether you consider this more readable is a matter of taste. 
-
-One last trick has to do with the fact that it is very common to subset mathematical symbols with some kind of index. 
-To deal with this, `latex_symb` objects have an `index` function that does just that. 
-So for instance, 
-
-```{r}
-al <- lsymb("\\alpha")
-al$index(0)
-```
 
 Overall, is this less work than writing the LaTeX code? 
 Probably not. 
