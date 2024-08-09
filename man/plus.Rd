@@ -2,7 +2,7 @@
 % Please edit documentation in R/main.R
 \name{+}
 \alias{+}
-\title{Masking the addition operator to work with latex_symb objects}
+\title{Masking the addition operator to work with `latex_symb` objects}
 \usage{
 e1 + e2
 }
@@ -12,8 +12,13 @@ e1 + e2
 \item{e2}{An object}
 }
 \value{
-A latex_symb object if one of the arguments is a latex_symb object. Its representation is the representation of the first argument concatenated with a plus sign and the representation of the second argument. Otherwise, the base addition operator is called.
+A `latex_symb` object if one of the arguments is a `latex_symb` object. Its representation is the representation of the first argument concatenated with a plus sign and the representation of the second argument. Otherwise, the base addition operator is called.
 }
 \description{
-Masking the addition operator to work with latex_symb objects
+Masking the addition operator to work with `latex_symb` objects
+}
+\examples{
+e1 <- lsymb("\\\\alpha")
+e2 <- lsymb("\\\\beta")
+e1 + e2
 }

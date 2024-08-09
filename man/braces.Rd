@@ -2,7 +2,7 @@
 % Please edit documentation in R/main.R
 \name{braces}
 \alias{braces}
-\title{Function that creates a latex_symb object consisting of its argument enclosed in braces}
+\title{Function that creates a `latex_symb` object consisting of its argument enclosed in braces}
 \usage{
 braces(expr)
 }
@@ -10,8 +10,12 @@ braces(expr)
 \item{expr}{An object}
 }
 \value{
-A latex_symb object. Its representation is the argument enclosed in braces.
+A `latex_symb` object. Its representation is the argument enclosed in braces.
 }
 \description{
-Function that creates a latex_symb object consisting of its argument enclosed in braces
+Function that creates a `latex_symb` object consisting of its argument enclosed in braces
+}
+\examples{
+e1 <- lsymb("\\\\alpha")
+braces(e1)
 }

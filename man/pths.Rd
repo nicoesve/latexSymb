@@ -2,7 +2,7 @@
 % Please edit documentation in R/main.R
 \name{pths}
 \alias{pths}
-\title{Function that creates a latex_symb object consisting of its argument enclosed in parentheses}
+\title{Function that creates a `latex_symb` object consisting of its argument enclosed in parentheses}
 \usage{
 pths(expr)
 }
@@ -10,8 +10,12 @@ pths(expr)
 \item{expr}{An object}
 }
 \value{
-A latex_symb object. Its representation is the argument enclosed in parentheses.
+A `latex_symb` object. Its representation is the argument enclosed in parentheses.
 }
 \description{
-Function that creates a latex_symb object consisting of its argument enclosed in parentheses
+Function that creates a `latex_symb` object consisting of its argument enclosed in parentheses
+}
+\examples{
+e1 <- lsymb("\\\\alpha")
+pths(e1)
 }

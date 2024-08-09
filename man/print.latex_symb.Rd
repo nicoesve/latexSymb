@@ -2,15 +2,18 @@
 % Please edit documentation in R/main.R
 \name{print.latex_symb}
 \alias{print.latex_symb}
-\title{Adaptation of the generic print function for latex_symb objects}
+\title{Prints the `LaTeX` representation of a `latex_symb` object}
 \usage{
 \method{print}{latex_symb}(x, ...)
 }
 \arguments{
-\item{x}{A latex_symb object}
+\item{x}{A `latex_symb` object}
 
-\item{...}{Additional arguments}
+\item{...}{Other arguments}
+}
+\value{
+The object's representation
 }
 \description{
-Adaptation of the generic print function for latex_symb objects
+Prints the `LaTeX` representation of a `latex_symb` object
 }

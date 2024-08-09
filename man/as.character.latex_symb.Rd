@@ -2,20 +2,20 @@
 % Please edit documentation in R/main.R
 \name{as.character.latex_symb}
 \alias{as.character.latex_symb}
-\title{Function that converts a latex_symb object to a character string}
+\title{Function that converts a `latex_symb` object to a character string}
 \usage{
 \method{as.character}{latex_symb}(x, ...)
 }
 \arguments{
-\item{x}{A latex_symb object}
+\item{x}{A `latex_symb` object}
 
 \item{...}{Additional arguments}
 }
 \value{
-A character string
+A character string with the `LaTeX` code for the symbol.
 }
 \description{
-Function that converts a latex_symb object to a character string
+Function that converts a `latex_symb` object to a character string
 }
 \examples{
 as.character(latex_symb("\\\\alpha"))

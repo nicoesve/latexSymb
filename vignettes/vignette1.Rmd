@@ -32,32 +32,35 @@ This package is a way to do that, while maintining the ability to write the LaTe
 The basic idea is that you'd have an R chunk:
 ```{r}
 library(latexSymb)
-rv1 <- latex_symb("\\Sigma")
-rv2 <- latex_symb("\\Lambda")
+rv1 <- lsymb("\\Sigma")
+rv2 <- lsymb("\\Lambda")
 ```
-And then when you need it in your `.Rmd` document, you just write `` `r rv1` ``, inside a math environment.
+And then when you need it in your `.Rmd` document, you just write `` `r il(rv1)` `` (the `il` is to wrap the expression in dollar signs, so that it is interpreted as inline math)..
 
 To encode the operations, you'd use R functions:
 ```{r}
 bivec <- function(rv1, rv2){
-    paste("\\vec{", as.character(rv1), as.character(rv2), "}") |>
-    latex_symb()
+    lsymb("\\vec{", as.character(rv1), as.character(rv2), "}")
 }
 Vect <- function(rv1, rv2){
-    paste(
+    lsymb(
         "\\operatorname{Vec}_{", 
         as.character(rv1), 
         "}(",
         bivec(rv1, rv2),
         ")"
-    ) |> latex_symb()
+    )
 } 
 t.latexSymb <- function(x){
-    paste(as.character(x), "^T") |>
-    latex_symb()
+    lsymb(as.character(x), "^T")
 }
 ```
-(you could also just write `rv1$repr`). 
+(you could also just write 
+```{r}
+bivec <- function(rv1, rv2) "\\vec{" * rv1$repr * rv2$repr * "}"
+```
+if you know you'll only use the function with `latex_symb` objects).
+
 Then you just write `` `r bivec(rv1, rv2)` `` and `` `r Vect(rv1, rv2)` `` and 
 `` `r t(Vect(rv1, rv2))*Vect(rv1, rv2)` `` inside math environments.
 
@@ -66,6 +69,15 @@ Notice that R's `*` function is overwritten to return an object of class `latex_
 About the second reason, I personally like using pipes to deal with that issue. 
 I'd write `` `r Vect(rv1, rv2) |> (\(x) t(x)*x)()` ``. 
 Whether you consider this more readable is a matter of taste. 
+
+One last trick has to do with the fact that it is very common to subset mathematical symbols with some kind of index. 
+To deal with this, `latex_symb` objects have an `index` function that does just that. 
+So for instance, 
+
+```{r}
+al <- lsymb("\\alpha")
+al$index(0)
+```
 
 Overall, is this less work than writing the LaTeX code? 
 Probably not. 
