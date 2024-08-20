@@ -1,6 +1,6 @@
 il <- function(x) paste("$", x, "$")
 
-env <- function(name, rows){
+lenv <- function(name, rows){
 	   paste0("\\begin{",
 		  name,
 		  "}\\n",

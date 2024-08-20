@@ -1,7 +1,4 @@
 factory <- function(components, base_function){
-       list(components, base_function) |>
-	   purrr::map(force)
-
        function(a,b){
 	    flag <- list(a,b) |> 
 			purrr::map_lgl(

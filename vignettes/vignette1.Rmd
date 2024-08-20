@@ -1,85 +1,110 @@
 ---
-title: "Writing LaTeX Code in Dynamic Documents using R"
+title: "Use R to Write LaTeX Code in RMarkdown Documents"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Writing LaTeX Code in Dynamic Documents using R}
+  %\VignetteIndexEntry{Use R to Write LaTeX Code in RMarkdown Documents}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-# Use R to Write LaTeX in Dynamic Documents
+# Use R to Write LaTeX Code in RMarkdown Documents"
 
-This package has a specific use case. 
+Technical reports written in RMarkdown usually include mathematical symbols. 
+RMarkdown addresses that by supporting the inclussion of raw LaTeX code. 
+Depending on the desired output format, the code gets rendered by some LaTeX engine.
+This feature is very convenient. 
 
-Suppose you're writing an `.Rmd` document that has LaTeX code embedded in it. 
-If the math that you're trying to write is not trivial, then the code can become cumbersome. 
-On top of that, it is annoying to have to switch between writing R and LaTeX code on the same document.
+The issue here is that writing LaTeX code can be cumbersome and the result is usually hard to read. 
+Although the use of `newcommand` can alleviate that, in practice people use it infrequently.
+The idea behind this package is that if you're writing an RMarkdown report, you're already using R, 
+so yuo might as well use it to write your LaTeX code as well.  
 
-For instance, consider writing the expression 
-    \[
-        \operatorname{Vec}_{\Sigma^\ast}(\vec{\Sigma \Lambda})^T \operatorname{Vec}_{\Sigma^\ast}(\vec{\Sigma \Lambda})
-    \]
-which is encountered in the study of Riemannian-manifold-valued random variables ($\Sigma$ and $\Lambda$ being the random variables).
+## Example
 
-Not only is it cumbersome, it is very hard to read without compiling to PDF. I'd argue there are two reasons for that:
-1. It is encoding what we want to see, not what we mean. 
-2. There is a lot of operations being composed: the vector arrow, the vectorization and the transposition.
+This is best explained through an example. 
+Consider the following equation, encountered in Riemannian geometry:
 
-About the first reason, think about it: $\Sigma$ is a symbol encoding something (the random variable), which we then encode into the LaTeX code `\Sigma`, neither of which are particularly informative (or only so by convention i.e. if you're used to it). 
-If this was actual code, you'd use informative yet simple variable names, like `rv`. 
-This package is a way to do that, while maintining the ability to write the LaTeX code necessary for sharing or publishing. 
+$$
+\frac{d}{dt} \langle V,W \rangle = \langle \frac{DV}{dt}, W \rangle + \langle V, \frac{DW}{dt} \rangle
+$$
 
-The basic idea is that you'd have an R chunk:
-```{r}
-library(latexSymb)
-rv1 <- lsymb("\\Sigma")
-rv2 <- lsymb("\\Lambda")
-```
-And then when you need it in your `.Rmd` document, you just write `` `r il(rv1)` `` (the `il` is to wrap the expression in dollar signs, so that it is interpreted as inline math)..
-
-To encode the operations, you'd use R functions:
-```{r}
-bivec <- function(rv1, rv2){
-    lsymb("\\vec{", rv1, rv2, "}")
-}
-Vect <- function(rv1, rv2){
-    lsymb(
-        "\\operatorname{Vec}_{", 
-        rv1, 
-        "}(",
-        bivec(rv1, rv2),
-        ")"
-    )
-} 
-t.latex_symb <- function(x){
-    lsymb(x, "^T")
-}
-```
-You could also just write 
-
-```{r}
-bivec <- function(rv1, rv2) "\\vec{" * rv1 * rv2 * "}"
+The straightforward way to code that is:
+```{latex}
+\frac{d}{dt} \langle V,W \rangle = \langle \frac{DV}{dt}, W \rangle + \langle V, \frac{DW}{dt} \rangle
 ```
 
-if you know you'll only use the function with `latex_symb` objects.
+If you were to use `latexSymb`, you would proceed as follows instead. 
+First you would create objects of class `latex_symb` to represent the vector fields:
 
-Then you just write `` `r bivec(rv1, rv2)` `` and `` `r Vect(rv1, rv2)` `` and 
-`` `r t(Vect(rv1, rv2))*Vect(rv1, rv2)` `` inside math environments.
+```{r}
+vf1 <- lsymb("V")
+vf2 <- lsymb("W")
+```
 
-Notice that R's `*` function is overwritten to return an object of class `latex_symb` whose LaTeX representation is the concatenation of the LaTeX representations of the arguments. The operations `+`, `-` and `^` are similarly overwritten, with `/` using `frac`. 
+Then you would write R functions to represent the mathematical concepts being used: the covariant derivative and the ordinary derivative:
 
-About the second reason, I personally like using pipes to deal with that issue. 
-I'd write `` `r Vect(rv1, rv2) |> (\(x) t(x)*x)()` ``. 
-Whether you consider this more readable is a matter of taste. 
+```{r}
+cov.der <- function(x) lsymb("D", x)/"dt"
+ddt <- function(x) lsymb("d", x)/"dt"
+```
 
-Overall, is this less work than writing the LaTeX code? 
-Probably not. 
-I just think it feels better, especially if you spend more time writing R code than LaTeX. 
-Could you do all of this using `\newcommand`? 
-Of course. 
-I just don't think that a lot of people do that. 
+Then you would put everything in an `equation` environment:
 
-The package is intentionally bare-bones. 
-You're encouraged to write you're own functions. 
-LaTeX is powerful because of its flexibility and I want to go with that. 
+```{r}
+lenv("equation", 
+     lsymb(
+           ddt(ang(vf1, vf2)), 
+           "=", 
+           ang(cov.der(vf1), vf2) + ang(vf1, cov.der(vf2))
+     )
+)
+```
+A caveat here is that your chuncks should have the options `results='asis', include=FALSE` 
+so that you obtain the plain LaTeX code. 
 
+### Unpacking
+
+Let us unpack all of this. 
+
+Notice first that in the definition of `cov.der` an important feature is being used. 
+Namely, the `/` function is overwritten by `latexSymb` so that if either of its arguments 
+are objects of class `latex_symb`, the output is another object of that class 
+that uses `frac` as you would expect. 
+This is also done with `+`, `-`, `*` and `^`. 
+Additionally, `under` adds support for the use of subscripts. 
+
+Also, in the numerator of `cov.der`, `lsymb("D", x)` concatenates the string `"D"` 
+and the object `x`, and wraps the result in a new `latex_symb` object. 
+
+Further, there's the use of the `latexSymb` function `ang`, which provides the dynamic enclosing for 
+the inner product, thus avoiding the need to write `left` and `right`. 
+The functions `br`, `sqbr` and `pths` do the same for braces, square brackets and parentheses respectively. 
+
+Finally, there is the function `lenv` that spares the user from writing `begin` and `end`. 
+The second argument is a list or a vector, whose components represent different lines. 
+So, for instance, we could have written also
+
+```{r}
+lenv("align*", 
+     c(
+       lsymb(ddt(ang(vf1, vf2)), "&=\\\\"),
+       lsymb("&=", ang(cov.der(vf1), vf2) + ang(vf1, cov.der(vf2)))
+     )
+)
+```
+
+`latex_symb` also exposes `il`, which surrounds expressions in dollar signs, 
+for inline math environments. 
+
+## Discussion
+
+On the whole, `latexSymb` may not significantly reduce the amount of code
+users have to write compared to raw LaTeX. 
+But I do think it makes it more readable and hence less prone to errors. 
+Users can mostly write what they mean, not what they want to see. 
+
+Additionally, `latexSymb` is not limited to RMarkdown. 
+Actually, it probably makes more sense in `.Rtex` documents. 
+In any case, any format that `knit` can handle will do. 
+
+Finally, for very complicated equations, R's piping should make things even more readable. 
