@@ -9,7 +9,7 @@ expect_equal(as.character(al - be), "\\alpha - \\beta")
 expect_equal(as.character(al * be), "\\alpha \\beta")
 expect_equal(as.character(al / be), "\\frac{ \\alpha }{ \\beta }")
 expect_equal(as.character(al ^ be), "\\alpha ^{ \\beta }")
-expect_equal(as.character((al^2) - (be^2)), "\\alpha ^{ 2 }")
+expect_equal(as.character((al^2) - (be^2)), "\\alpha ^{ 2 } - \\beta ^{ 2 }")
 expect_equal(as.character(under(al, be)), "\\alpha _{ \\beta }")
 })
 
@@ -35,7 +35,7 @@ testing_expr <- pths(al^2 + be)*pths(al - be/3)
 expect_equal(as.character(testing_expr), "\\left( \\alpha ^{ 2 } + \\beta \\right) \\left( \\alpha - \\frac{ \\beta }{ 3 } \\right)")
 env_expr <- lenv("align",
     c(
-      lsymb(al^2 - be, "&=", 0, "\\\\"),
+      lsymb(al^2 - be^2, "&=", 0, "\\\\"),
       lsymb(pths(al - be)*pths(al + be), "&=", 0)
      )
 )
