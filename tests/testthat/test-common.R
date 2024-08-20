@@ -1,4 +1,4 @@
-testthat("Elementary operations are parsed as expected", {
+test_that("Elementary operations are parsed as expected", {
 al <- lsymb("\\alpha")
 be <- lsymb("\\beta")
 expect_equal(as.character(al), "\\alpha")
@@ -9,10 +9,11 @@ expect_equal(as.character(al - be), "\\alpha - \\beta")
 expect_equal(as.character(al * be), "\\alpha \\beta")
 expect_equal(as.character(al / be), "\\frac{ \\alpha }{ \\beta }")
 expect_equal(as.character(al ^ be), "\\alpha ^{ \\beta }")
+expect_equal(as.character((al^2) - (be^2)), "\\alpha ^{ 2 }")
 expect_equal(as.character(under(al, be)), "\\alpha _{ \\beta }")
 })
 
-testthat("Elementary grouping works as expected", {
+test_that("Elementary grouping works as expected", {
 al <- lsymb("\\alpha")
 expect_equal(as.character(pths(al)), "\\left( \\alpha \\right)")
 expect_equal(as.character(br(al)), "\\lbrace \\alpha \\rbrace")
@@ -20,9 +21,24 @@ expect_equal(as.character(sqbr(al)), "\\left[ \\alpha \\right]")
 expect_equal(as.character(ang(al)), "\\langle \\alpha \\rangle")
 })
 
-testthat("LaTeX environments work", {
+test_that("LaTeX environments work", {
 al <- lsymb("\\alpha")
-expect_equal(as.character(il(al)), "$ \\alpha $")
-expect_equal(as.character(lenv("align", c(lsymb(al, "&=\\\\"), lsymb("&=", al)))),
-            "\\begin{align}\\n\\alpha &=\\\\\\n&= \\alpha\\n\\end{align}")
+expect_equal(as.character(il(al)), "$\\alpha$")
+expect_equal(as.character(lenv("align", c(lsymb(al^2, "&=\\\\"), lsymb("&=", al)))),
+            "\\begin{align}\\n\\alpha ^{ 2 } &=\\\\\\n&= \\alpha\\n\\end{align}")
+})
+
+test_that("nesting works", {
+al <- lsymb("\\alpha")
+be <- lsymb("\\beta")
+testing_expr <- pths(al^2 + be)*pths(al - be/3)
+expect_equal(as.character(testing_expr), "\\left( \\alpha ^{ 2 } + \\beta \\right) \\left( \\alpha - \\frac{ \\beta }{ 3 } \\right)")
+env_expr <- lenv("align",
+    c(
+      lsymb(al^2 - be, "&=", 0, "\\\\"),
+      lsymb(pths(al - be)*pths(al + be), "&=", 0)
+     )
+)
+expect_equal(as.character(env_expr),
+"\\begin{align}\\n\\alpha ^{ 2 } - \\beta ^{ 2 } &= 0 \\\\\\n\\left( \\alpha - \\beta \\right) \\left( \\alpha + \\beta \\right) &= 0\\n\\end{align}")
 })

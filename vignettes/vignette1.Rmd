@@ -37,13 +37,15 @@ If you were to use `latexSymb`, you would proceed as follows instead.
 First you would create objects of class `latex_symb` to represent the vector fields:
 
 ```{r}
+library(latexSymb)
 vf1 <- lsymb("V")
 vf2 <- lsymb("W")
 ```
 
-Then you would write R functions to represent the mathematical concepts being used: the covariant derivative and the ordinary derivative:
+Then you would write R functions to represent the mathematical concepts being used: the inner product, the covariant derivative and the ordinary derivative:
 
 ```{r}
+inner <- function(x,y) ang(lsymb(x, ",", y))
 cov.der <- function(x) lsymb("D", x)/"dt"
 ddt <- function(x) lsymb("d", x)/"dt"
 ```
@@ -53,9 +55,9 @@ Then you would put everything in an `equation` environment:
 ```{r}
 lenv("equation", 
      lsymb(
-           ddt(ang(vf1, vf2)), 
+           ddt(inner(vf1, vf2)), 
            "=", 
-           ang(cov.der(vf1), vf2) + ang(vf1, cov.der(vf2))
+           inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
      )
 )
 ```
@@ -87,8 +89,8 @@ So, for instance, we could have written also
 ```{r}
 lenv("align*", 
      c(
-       lsymb(ddt(ang(vf1, vf2)), "&=\\\\"),
-       lsymb("&=", ang(cov.der(vf1), vf2) + ang(vf1, cov.der(vf2)))
+       lsymb(ddt(inner(vf1, vf2)), "&=\\\\"),
+       lsymb("&=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))
      )
 )
 ```

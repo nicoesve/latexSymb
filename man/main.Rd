@@ -1,12 +1,12 @@
 \name{lsymb}
 \alias{lsymb}
-\alias{print.lsymb}
-\alias{as.character.lsymb}
+\alias{print.latex_symb}
+\alias{as.character.latex_symb}
 \title{Create, print and turn to string objects of class \code{latex_symb}}
 \usage{
 lsymb(...)
-print(x, ...)
-as.character(x, ...)
+\method{print}{latex_symb}(x, ...)
+\method{as.character}{latex_symb}(x, ...)
 }
 \arguments{
 \item{...}{Objects that can be passed to \code{as.character}.}
@@ -18,11 +18,11 @@ as.character(x, ...)
 It is an S3 class, whose objects are lists with a single component called \code{repr}. 
 \code{repr} is the \code{LaTeX} code for the object, which is obtained by pasting the character representations of all the arguments. 
 \item \code{print.lsymb} passes the \code{repr} of its first argument, plus additional arguments, to \code{print}. The returned value is whatever \code{print} returns. 
-\item \code{as.character.lsymb} passes the \code{repr} of its first argument, plus additional arguments, to \code{as.character}. The returned value is whatever \core{as.character} returns.
+\item \code{as.character.lsymb} passes the \code{repr} of its first argument, plus additional arguments, to \code{as.character}. The returned value is whatever \code{as.character} returns.
 }
 }
 \examples{
-al <- lsymb("\\alpha")
+al <- lsymb("\\\\alpha")
 print(al)
 as.character(al)
 }

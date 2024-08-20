@@ -4,6 +4,6 @@ lsymb <- function(...){
 	     return(x)
          }
 
-as.character.latex_symb <- function(x, ...) as.character(x$repr, ...)
+as.character.latex_symb <- function(x, ...) base::as.character(x$repr, ...)
 
-print.latex_symb <- function(x, ...) print(x$repr, ...)
+print.latex_symb <- function(x, ...) base::print(x$repr, ...)

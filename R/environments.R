@@ -1,4 +1,4 @@
-il <- function(x) paste("$", x, "$")
+il <- function(x) paste0("$", x, "$")
 
 lenv <- function(name, rows){
 	   paste0("\\begin{",

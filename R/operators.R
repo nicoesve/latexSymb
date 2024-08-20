@@ -1,12 +1,17 @@
 factory <- function(components, base_function){
-       function(a,b){
+        force(components)
+        force(base_function)
+        function(a,b){
+print(a)
+print(b)
 	    flag <- list(a,b) |> 
 			purrr::map_lgl(
 			    .x = _, 
 			    .f = \(y) inherits(y, "latex_symb")
 			) |> 
 			any()
-	    
+print(flag)
+
 	    ifelse(flag,
 		   components(a,b) |> do.call(lsymb, args = _),
 		   base_function(a,b)
