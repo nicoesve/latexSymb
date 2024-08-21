@@ -1,14 +1,14 @@
-# Use R to Write LaTeX Code in RMarkdown Documents"
+# Use R to Write LaTeX Code in R Markdown Documents
 
-Technical reports written in RMarkdown usually include mathematical symbols. 
-RMarkdown addresses that by supporting the inclussion of raw LaTeX code. 
+Technical reports written in R Markdown usually include mathematical symbols. 
+R Markdown addresses that by supporting the inclussion of raw LaTeX code. 
 Depending on the desired output format, the code gets rendered by some LaTeX engine.
 This feature is very convenient. 
 
 The issue here is that writing LaTeX code can be cumbersome and the result is usually hard to read. 
 Although the use of `newcommand` can alleviate that, in practice people use it infrequently.
-The idea behind this package is that if you're writing an RMarkdown report, you're already using R, 
-so yuo might as well use it to write your LaTeX code as well.  
+The idea behind this package is that if you're writing an R Markdown report, you're already using R, 
+so you might as well use it to write your LaTeX code as well.  
 
 ## Example
 
@@ -16,25 +16,27 @@ This is best explained through an example.
 Consider the following equation, encountered in Riemannian geometry:
 
 $$
-\frac{d}{dt} \langle V,W \rangle = \langle \frac{DV}{dt}, W \rangle + \langle V, \frac{DW}{dt} \rangle
+\frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
 $$
 
 The straightforward way to code that is:
 ```{latex}
-\frac{d}{dt} \langle V,W \rangle = \langle \frac{DV}{dt}, W \rangle + \langle V, \frac{DW}{dt} \rangle
+\frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
 ```
 
 If you were to use `latexSymb`, you would proceed as follows instead. 
 First you would create objects of class `latex_symb` to represent the vector fields:
 
 ```{r}
+library(latexSymb)
 vf1 <- lsymb("V")
 vf2 <- lsymb("W")
 ```
 
-Then you would write R functions to represent the mathematical concepts being used: the covariant derivative and the ordinary derivative:
+Then you would write R functions to represent the mathematical concepts being used: the inner product, the covariant derivative and the ordinary derivative:
 
 ```{r}
+inner <- function(x,y) ang(lsymb(x, ",", y))
 cov.der <- function(x) lsymb("D", x)/"dt"
 ddt <- function(x) lsymb("d", x)/"dt"
 ```
@@ -44,9 +46,9 @@ Then you would put everything in an `equation` environment:
 ```{r}
 lenv("equation", 
      lsymb(
-           ddt(ang(vf1, vf2)), 
+           ddt(inner(vf1, vf2)), 
            "=", 
-           ang(cov.der(vf1), vf2) + ang(vf1, cov.der(vf2))
+           inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
      )
 )
 ```
@@ -78,8 +80,8 @@ So, for instance, we could have written also
 ```{r}
 lenv("align*", 
      c(
-       lsymb(ddt(ang(vf1, vf2)), "&="),
-       lsymb("&=", ang(cov.der(vf1), vf2) + ang(vf1, cov.der(vf2)))
+       lsymb(ddt(inner(vf1, vf2)), "&=\\\\"),
+       lsymb("&=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))
      )
 )
 ```
