@@ -62,7 +62,7 @@ lenv("equation",
 
 A caveat here is that in order to obtain the right LaTeX code, you must always use **inline** chunks like 
 
-```
+```{markdown}
 `r vf1` 
 ``` 
 
