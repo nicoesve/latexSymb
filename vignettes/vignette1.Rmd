@@ -7,8 +7,6 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-# Use R to Write LaTeX Code in R Markdown Documents
-
 Technical reports written in R Markdown usually include mathematical symbols. 
 R Markdown addresses that by supporting the inclussion of raw LaTeX code. 
 Depending on the desired output format, the code gets rendered by some LaTeX engine.
