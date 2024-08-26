@@ -1,6 +1,6 @@
 # latexSymb
 
-Simplify the task of writing 'LaTeX' code by using 'R'. Instead of using 'LaTeX' utilities like 'newcommand', write 'R' functions for more flexibility and readability. Also, additional support for grouping makes it easier to write complicated expressions.
+Simplify the task of writing LaTeX code by using R. Instead of using LaTeX utilities like `newcommand`, write R functions for more flexibility and readability. Also, additional support for grouping makes it easier to write complicated expressions.
 
 ## Installation
 
