@@ -106,10 +106,20 @@ ordinary derivative:</p>
 <span><span class="va">ddt</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="va">x</span><span class="op">)</span><span class="op">/</span><span class="st">"dt"</span></span></code></pre></div>
 <p>Then you would put everything in an <code>equation</code>
 environment:</p>
-<p><code>r lenv("equation",       lsymb(            ddt(inner(vf1, vf2)),             "=",             inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))      ) )</code>
-A caveat here is that your chuncks should have the options
-<code>results='asis', include=FALSE</code> so that you obtain the plain
-LaTeX code.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/environments.html">lenv</a></span><span class="op">(</span><span class="st">"equation"</span>, </span>
+<span>     <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span></span>
+<span>           <span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>           <span class="st">"="</span>, </span>
+<span>           <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span></span>
+<span>     <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "\\begin{equation}\\n\\frac{ d \\langle V , W \\rangle }{ dt } = \\langle \\frac{ D V }{ dt } , W \\rangle + \\langle V , \\frac{ D W }{ dt } \\rangle\\n\\end{equation}"</span></span></code></pre>
+<p>A caveat here is that in order to obtain the right LaTeX code, you
+must always use <strong>inline</strong> chunks like <code>V</code> to
+print objects of class <code>latexSymb</code> in your <code>.Rmd</code>,
+even if you intend to print LaTeX code that is not inline, like an
+<code>align</code> environment.</p>
 <div class="section level3">
 <h3 id="unpacking">Unpacking<a class="anchor" aria-label="anchor" href="#unpacking"></a>
 </h3>
@@ -136,7 +146,14 @@ parentheses respectively.</p>
 from writing <code>begin</code> and <code>end</code>. The second
 argument is a list or a vector, whose components represent different
 lines. So, for instance, we could have written also</p>
-<p><code>r lenv("align*",       c(        lsymb(ddt(inner(vf1, vf2)), "&amp;=\\\\"),        lsymb("&amp;=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))      ) )</code></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/environments.html">lenv</a></span><span class="op">(</span><span class="st">"align*"</span>, </span>
+<span>     <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>       <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span>, <span class="st">"&amp;=\\\\"</span><span class="op">)</span>,</span>
+<span>       <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"&amp;="</span>, <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>     <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "\\begin{align*}\\n\\frac{ d \\langle V , W \\rangle }{ dt } &amp;=\\\\\\n&amp;= \\langle \\frac{ D V }{ dt } , W \\rangle + \\langle V , \\frac{ D W }{ dt } \\rangle\\n\\end{align*}"</span></span></code></pre>
 <p><code>latex_symb</code> also exposes <code>il</code>, which surrounds
 expressions in dollar signs, for inline math environments.</p>
 </div>
