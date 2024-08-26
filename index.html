@@ -51,42 +51,22 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="use-r-to-write-latex-code-in-r-markdown-documents">Use R to Write LaTeX Code in R Markdown Documents<a class="anchor" aria-label="anchor" href="#use-r-to-write-latex-code-in-r-markdown-documents"></a>
+<div class="page-header"><h1 id="latexsymb">latexSymb<a class="anchor" aria-label="anchor" href="#latexsymb"></a>
 </h1></div>
-<p>Technical reports written in R Markdown usually include mathematical symbols. R Markdown addresses that by supporting the inclussion of raw LaTeX code. Depending on the desired output format, the code gets rendered by some LaTeX engine. This feature is very convenient.</p>
-<p>The issue here is that writing LaTeX code can be cumbersome and the result is usually hard to read. Although the use of <code>newcommand</code> can alleviate that, in practice people use it infrequently. The idea behind this package is that if you’re writing an R Markdown report, you’re already using R, so you might as well use it to write your LaTeX code as well.</p>
+<p>Simplify the task of writing ‘LaTeX’ code by using ‘R’. Instead of using ‘LaTeX’ utilities like ‘newcommand’, write ‘R’ functions for more flexibility and readability. Also, additional support for grouping makes it easier to write complicated expressions.</p>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>This is best explained through an example. Consider the following equation, encountered in Riemannian geometry:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mrow><mo stretchy="true" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mi>W</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">⟨</mo><mfrac><mrow><mi>D</mi><mi>V</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>,</mo><mi>W</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mfrac><mrow><mi>D</mi><mi>W</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo stretchy="true" form="postfix">⟩</mo></mrow></mrow><annotation encoding="application/x-tex">
-\frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
-</annotation></semantics></math></p>
-<p>The straightforward way to code that is: <code>{latex} \frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle</code></p>
-<p>If you were to use <code>latexSymb</code>, you would proceed as follows instead. First you would create objects of class <code>latex_symb</code> to represent the vector fields:</p>
-<p><code>{r} library(latexSymb) vf1 &lt;- lsymb("V") vf2 &lt;- lsymb("W")</code></p>
-<p>Then you would write R functions to represent the mathematical concepts being used: the inner product, the covariant derivative and the ordinary derivative:</p>
-<p><code>{r} inner &lt;- function(x,y) ang(lsymb(x, ",", y)) cov.der &lt;- function(x) lsymb("D", x)/"dt" ddt &lt;- function(x) lsymb("d", x)/"dt"</code></p>
-<p>Then you would put everything in an <code>equation</code> environment:</p>
-<p><code>{r} lenv("equation",       lsymb(            ddt(inner(vf1, vf2)),             "=",             inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))      ) )</code> A caveat here is that your chuncks should have the options <code>results='asis', include=FALSE</code> so that you obtain the plain LaTeX code.</p>
-<div class="section level3">
-<h3 id="unpacking">Unpacking<a class="anchor" aria-label="anchor" href="#unpacking"></a>
-</h3>
-<p>Let us unpack all of this.</p>
-<p>Notice first that in the definition of <code>cov.der</code> an important feature is being used. Namely, the <code>/</code> function is overwritten by <code>latexSymb</code> so that if either of its arguments are objects of class <code>latex_symb</code>, the output is another object of that class that uses <code>frac</code> as you would expect. This is also done with <code>+</code>, <code>-</code>, <code>*</code> and <code>^</code>. Additionally, <code>under</code> adds support for the use of subscripts.</p>
-<p>Also, in the numerator of <code>cov.der</code>, <code>lsymb("D", x)</code> concatenates the string <code>"D"</code> and the object <code>x</code>, and wraps the result in a new <code>latex_symb</code> object.</p>
-<p>Further, there’s the use of the <code>latexSymb</code> function <code>ang</code>, which provides the dynamic enclosing for the inner product, thus avoiding the need to write <code>left</code> and <code>right</code>. The functions <code>br</code>, <code>sqbr</code> and <code>pths</code> do the same for braces, square brackets and parentheses respectively.</p>
-<p>Finally, there is the function <code>lenv</code> that spares the user from writing <code>begin</code> and <code>end</code>. The second argument is a list or a vector, whose components represent different lines. So, for instance, we could have written also</p>
-<p><code>{r} lenv("align*",       c(        lsymb(ddt(inner(vf1, vf2)), "&amp;=\\\\"),        lsymb("&amp;=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))      ) )</code></p>
-<p><code>latex_symb</code> also exposes <code>il</code>, which surrounds expressions in dollar signs, for inline math environments.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="discussion">Discussion<a class="anchor" aria-label="anchor" href="#discussion"></a>
-</h2>
-<p>On the whole, <code>latexSymb</code> may not significantly reduce the amount of code users have to write compared to raw LaTeX. But I do think it makes it more readable and hence less prone to errors. Users can mostly write what they mean, not what they want to see.</p>
-<p>Additionally, <code>latexSymb</code> is not limited to RMarkdown. Actually, it probably makes more sense in <code>.Rtex</code> documents. In any case, any format that <code>knit</code> can handle will do.</p>
-<p>Finally, for very complicated equations, R’s piping should make things even more readable.</p>
+<ul>
+<li>
+<strong>Released</strong> version from CRAN:</li>
+</ul>
+<p><code>{r} install.packages("latexSymb")</code></p>
+<ul>
+<li>
+<strong>Development</strong> version from GitHub:</li>
+</ul>
+<p><code>{r} if (!require("devtools")) {   install.packages("devtools") } devtools::install_github("nicoesve/latexSymb")</code></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
