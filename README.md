@@ -6,13 +6,13 @@ Simplify the task of writing LaTeX code by using R. Instead of using LaTeX utili
 
 - __Released__ version from CRAN:
 
-```{r}
+```
 install.packages("latexSymb")
 ```
 
 - __Development__ version from GitHub:
 
-```{r}
+```
 if (!require("devtools")) {
   install.packages("devtools")
 }
