@@ -60,7 +60,13 @@ lenv("equation",
 )
 ```
 
-A caveat here is that in order to obtain the right LaTeX code, you must always use **inline** chunks like `` `r vf1` `` to print objects of class `latexSymb` in your `.Rmd`, even if you intend to print LaTeX code that is not inline, like an `align` environment. 
+A caveat here is that in order to obtain the right LaTeX code, you must always use **inline** chunks like 
+
+```
+`r vf1` 
+``` 
+
+to print objects of class `latexSymb` in your `.Rmd`, even if you intend to print LaTeX code that is not inline, like an `align` environment. 
 
 ### Unpacking
 
