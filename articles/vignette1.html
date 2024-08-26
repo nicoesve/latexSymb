@@ -63,9 +63,6 @@
 
     
     
-<div class="section level2">
-<h2 id="use-r-to-write-latex-code-in-r-markdown-documents">Use R to Write LaTeX Code in R Markdown Documents<a class="anchor" aria-label="anchor" href="#use-r-to-write-latex-code-in-r-markdown-documents"></a>
-</h2>
 <p>Technical reports written in R Markdown usually include mathematical
 symbols. R Markdown addresses that by supporting the inclussion of raw
 LaTeX code. Depending on the desired output format, the code gets
@@ -76,9 +73,9 @@ result is usually hard to read. Although the use of
 infrequently. The idea behind this package is that if you’re writing an
 R Markdown report, you’re already using R, so you might as well use it
 to write your LaTeX code as well.</p>
-<div class="section level3">
-<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h3>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
 <p>This is best explained through an example. Consider the following
 equation, encountered in Riemannian geometry:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mrow><mo stretchy="true" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mi>W</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">⟨</mo><mfrac><mrow><mi>D</mi><mi>V</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>,</mo><mi>W</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mfrac><mrow><mi>D</mi><mi>W</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo stretchy="true" form="postfix">⟩</mo></mrow></mrow><annotation encoding="application/x-tex">
@@ -121,9 +118,9 @@ environment:</p>
 <p>A caveat here is that your chuncks should have the options
 <code>results='asis', include=FALSE</code> so that you obtain the plain
 LaTeX code.</p>
-<div class="section level4">
-<h4 id="unpacking">Unpacking<a class="anchor" aria-label="anchor" href="#unpacking"></a>
-</h4>
+<div class="section level3">
+<h3 id="unpacking">Unpacking<a class="anchor" aria-label="anchor" href="#unpacking"></a>
+</h3>
 <p>Let us unpack all of this.</p>
 <p>Notice first that in the definition of <code>cov.der</code> an
 important feature is being used. Namely, the <code>/</code> function is
@@ -159,9 +156,9 @@ lines. So, for instance, we could have written also</p>
 expressions in dollar signs, for inline math environments.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="discussion">Discussion<a class="anchor" aria-label="anchor" href="#discussion"></a>
-</h3>
+<div class="section level2">
+<h2 id="discussion">Discussion<a class="anchor" aria-label="anchor" href="#discussion"></a>
+</h2>
 <p>On the whole, <code>latexSymb</code> may not significantly reduce the
 amount of code users have to write compared to raw LaTeX. But I do think
 it makes it more readable and hence less prone to errors. Users can
@@ -171,7 +168,6 @@ Actually, it probably makes more sense in <code>.Rtex</code> documents.
 In any case, any format that <code>knit</code> can handle will do.</p>
 <p>Finally, for very complicated equations, R’s piping should make
 things even more readable.</p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
