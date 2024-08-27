@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">latexSymb</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,7 @@ environment:</p>
 <span>           <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span></span>
 <span>     <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "\\begin{equation}\\n\\frac{ d \\langle V , W \\rangle }{ dt } = \\langle \\frac{ D V }{ dt } , W \\rangle + \\langle V , \\frac{ D W }{ dt } \\rangle\\n\\end{equation}"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "\\begin{equation}\\frac{ d \\langle V , W \\rangle }{ dt } = \\langle \\frac{ D V }{ dt } , W \\rangle + \\langle V , \\frac{ D W }{ dt } \\rangle\\end{equation}"</span></span></code></pre>
 <p>A caveat here is that in order to obtain the right LaTeX code, you
 must always use <strong>inline</strong> chunks like</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="in">`r vf1`</span> </span></code></pre></div>
@@ -154,7 +154,7 @@ lines. So, for instance, we could have written also</p>
 <span>       <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"&amp;="</span>, <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>     <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "\\begin{align*}\\n\\frac{ d \\langle V , W \\rangle }{ dt } &amp;=\\\\\\n&amp;= \\langle \\frac{ D V }{ dt } , W \\rangle + \\langle V , \\frac{ D W }{ dt } \\rangle\\n\\end{align*}"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "\\begin{align*}\\frac{ d \\langle V , W \\rangle }{ dt } &amp;=\\\\&amp;= \\langle \\frac{ D V }{ dt } , W \\rangle + \\langle V , \\frac{ D W }{ dt } \\rangle\\end{align*}"</span></span></code></pre>
 <p><code>latex_symb</code> also exposes <code>il</code>, which surrounds
 expressions in dollar signs, for inline math environments.</p>
 </div>
