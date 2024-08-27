@@ -11,6 +11,9 @@ lenv(name, rows)
 \item{name}{The name of the \code{LaTeX} environment. For instance, \code{align} or \code{gather}}.
 \item{rows}{A list of objects that can be passed to \code{as.character}.}
 }
+\description{
+Equations and symbols in \code{LaTeX} can be either inline or on their own. \code{il} wraps expressions for the former, \code{lenv} for the latter.
+}
 \value{
 \itemize{
 \item For \code{il}, \code{x}'s \code{repr} surrounded by dollar signs.

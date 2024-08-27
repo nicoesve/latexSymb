@@ -12,6 +12,9 @@ lsymb(...)
 \item{...}{Objects that can be passed to \code{as.character}.}
 \item{x}{An object of class \code{latex_symb}}
 }
+\description{
+The class \code{latex_symb} is simply a wrapper for a string with \code{LaTeX} code. \code{lsymb} creates the wrapper, \code{as.character} and \code{print} extract the string.
+}
 \value{
 \itemize{
 \item \code{lsymb} returns an object of class \code{latex_symb}. 

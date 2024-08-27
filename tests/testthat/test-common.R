@@ -25,7 +25,7 @@ test_that("LaTeX environments work", {
 al <- lsymb("\\alpha")
 expect_equal(as.character(il(al)), "$\\alpha$")
 expect_equal(as.character(lenv("align", c(lsymb(al^2, "&=\\\\"), lsymb("&=", al)))),
-            "\\begin{align}\\n\\alpha ^{ 2 } &=\\\\\\n&= \\alpha\\n\\end{align}")
+            "\\begin{align}\\alpha ^{ 2 } &=\\\\&= \\alpha\\end{align}")
 })
 
 test_that("nesting works", {
@@ -40,5 +40,5 @@ env_expr <- lenv("align",
      )
 )
 expect_equal(as.character(env_expr),
-"\\begin{align}\\n\\alpha ^{ 2 } - \\beta ^{ 2 } &= 0 \\\\\\n\\left( \\alpha - \\beta \\right) \\left( \\alpha + \\beta \\right) &= 0\\n\\end{align}")
+"\\begin{align}\\alpha ^{ 2 } - \\beta ^{ 2 } &= 0 \\\\\\left( \\alpha - \\beta \\right) \\left( \\alpha + \\beta \\right) &= 0\\end{align}")
 })

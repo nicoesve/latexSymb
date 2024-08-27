@@ -18,6 +18,9 @@ under(a,b)
 \item{a}{An object that can be passed to \code{as.character}}
 \item{b}{An object that can be passed to \code{as.character}}
 }
+\description{
+There are natural interpretations for doing arithmetic operations on objects of class \code{latexSymb}. Namely, their output is another object of that class, constructed using the \code{repr} of the arguments and the corresponding symbol for the operation. These functions implement the elementary ones.
+}
 \value{
 An object of class \code{latex_symb} whose \code{repr} is:
 \itemize{
