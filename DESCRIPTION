@@ -9,7 +9,6 @@ Maintainer: Nicolas Escobar <nescoba@iu.edu>
 Description: Simplify the task of writing 'LaTeX' code by using 'R'. Instead of using 'LaTeX' utilities like 'newcommand', write 'R' functions for more flexibility and readability. Also, additional support for grouping makes it easier to write complicated expressions.
 License: GPL(>= 2)
 Encoding: UTF-8
-URL: nicoesve.github.io/latexSymb/
 VignetteBuilder: knitr, rmarkdown
 Depends: R (>= 4.1.0), purrr
 Suggests:
