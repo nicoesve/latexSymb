@@ -4,17 +4,21 @@ Simplify the task of writing LaTeX code by using R. Instead of using LaTeX utili
 
 ## Installation
 
-- __Released__ version from CRAN:
-
-```
-install.packages("latexSymb")
-```
-
-- __Development__ version from GitHub:
+- __Current__ version from GitHub:
 
 ```
 if (!require("devtools")) {
   install.packages("devtools")
 }
 devtools::install_github("nicoesve/latexSymb")
+``` 
+
+This version fixes a bug in `lenv` (unnecessary '\\n's) and has a minor documentation update.  
+
+- __Released__ version from CRAN:
+
 ```
+install.packages("latexSymb")
+```
+
+
