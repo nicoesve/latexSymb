@@ -50,23 +50,17 @@ ddt <- function(x) lsymb("d", x)/"dt"
 
 Then you would put everything in an `equation` environment:
 
-```{r, output=FALSE}
+```{r}
 lenv("equation", 
-     lsymb(
-           ddt(inner(vf1, vf2)), 
-           "=", 
-           inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
-     )
-)
+    lsymb(
+          ddt(inner(vf1, vf2)), 
+          "=", 
+          inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
+    )
+) |> cat()
 ```
 
-A caveat here is that in order to obtain the right LaTeX code, you must always use **inline** chunks like 
-
-```{markdown}
-`r vf1` 
-``` 
-
-to print objects of class `latexSymb` in your `.Rmd`, even if you intend to print LaTeX code that is not inline, like an `align` environment. 
+Notice that you need to `cat` instead of `print` to avoid double backslashes.
 
 ### Unpacking
 
