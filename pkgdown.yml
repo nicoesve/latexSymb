@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   vignette1: vignette1.html
-last_built: 2024-08-29T20:53Z
+last_built: 2024-09-20T03:56Z
 urls:
   reference: https://nicoesve.github.io/latexSymb/reference
   article: https://nicoesve.github.io/latexSymb/articles
