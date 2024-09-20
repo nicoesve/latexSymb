@@ -17,3 +17,4 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 URL: https://nicoesve.github.io/latexSymb/
+BugReports: https://github.com/nicoesve/latexSymb/issues
