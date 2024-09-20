@@ -1,0 +1,10 @@
+# latexSymb 0.4.2
+
+## New Features
+
+- Functions for simple sums, products and integrals.
+- Functions for operators on mathematical functions, namely evaluation, pullbacking, pushforwarding and taking derivatives and limits.
+
+## Bug Fixes
+
+- `lenv` no longer writes the extra `\n`

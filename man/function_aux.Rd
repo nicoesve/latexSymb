@@ -12,7 +12,7 @@
     pfow(f)
     dd(f, var)
     pp(f, var)
-    lim(f, x, to = lsymb("\\infty"))
+    lim(f, var, to = lsymb("\\\\infty"))
 }
 \arguments{
     \item{f}{latex_symb object representing a function}

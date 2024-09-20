@@ -1,13 +1,13 @@
 Package: latexSymb
 Type: Package
-Title: Write Equations in a Way That You Can Read
+Title: Write Equations in a Way that You Can Read
 Version: 0.4.2
 Date: 2024-08-27
 Authors@R: c(person("Nicolas", "Escobar", role = c("aut", "cre"), email = "nescoba@iu.edu"))
 Author: Nicolas Escobar [aut, cre]
 Maintainer: Nicolas Escobar <nescoba@iu.edu>
 Description: Utilities to help you write 'LaTeX' in a more readable way. Instead of using plain code or a series of 'newcommand' statements, use 'R' functions. You will be able to write what you mean and make fewer mistakes.  
-License: GPL(>= 2)
+License: GPL(>= 3)
 Encoding: UTF-8
 VignetteBuilder: knitr, rmarkdown
 Depends: R (>= 4.1.0), purrr
