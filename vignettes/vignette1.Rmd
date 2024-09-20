@@ -50,7 +50,7 @@ ddt <- function(x) lsymb("d", x)/"dt"
 
 Then you would put everything in an `equation` environment:
 
-```{r}
+```{r, results = "asis"}
 lenv("equation", 
     lsymb(
           ddt(inner(vf1, vf2)), 
@@ -84,13 +84,13 @@ Finally, there is the function `lenv` that spares the user from writing `begin` 
 The second argument is a list or a vector, whose components represent different lines. 
 So, for instance, we could have written also
 
-```{r, output=FALSE}
+```{r, results = "asis"}
 lenv("align*", 
      c(
        lsymb(ddt(inner(vf1, vf2)), "&=\\\\"),
        lsymb("&=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))
      )
-)
+) |> cat()
 ```
 
 `latex_symb` also exposes `il`, which surrounds expressions in dollar signs, 
