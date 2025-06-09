@@ -55,12 +55,12 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="latexsymb">latexSymb<a class="anchor" aria-label="anchor" href="#latexsymb"></a>
 </h1></div>
-<p>Transform complex LaTeX mathematical expressions into readable, composable R code. Instead of wrestling with backslashes and braces, express your mathematics naturally using familiar R syntax.</p>
+<p>Transform complex LaTex mathematical expressions into readable, composable R code. Instead of wrestling with backslashes and braces, express your mathematics naturally using familiar R syntax.</p>
 <div class="section level2">
 <h2 id="id_-why-latexsymb">✨ Why latexSymb?<a class="anchor" aria-label="anchor" href="#id_-why-latexsymb"></a>
 </h2>
 <div class="section level3">
-<h3 id="before-raw-latex-">Before (Raw LaTeX) 😓<a class="anchor" aria-label="anchor" href="#before-raw-latex-"></a>
+<h3 id="before-raw-latex-">Before (Raw LaTex) 😓<a class="anchor" aria-label="anchor" href="#before-raw-latex-"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">\frac</span>{d}{dt} <span class="fu">\left</span> <span class="fu">\langle</span> V,W <span class="fu">\right</span> <span class="fu">\rangle</span> = <span class="fu">\left</span> <span class="fu">\langle</span> <span class="fu">\frac</span>{DV}{dt}, W <span class="fu">\right</span> <span class="fu">\rangle</span> + <span class="fu">\left</span> <span class="fu">\langle</span> V, <span class="fu">\frac</span>{DW}{dt} <span class="fu">\right</span> <span class="fu">\rangle</span></span></code></pre></div>
 </div>
@@ -68,11 +68,13 @@
 <h3 id="after-latexsymb-">After (latexSymb) 🎉<a class="anchor" aria-label="anchor" href="#after-latexsymb-"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">inner</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="reference/enclosing.html">ang</a></span><span class="op">(</span><span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">","</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">vf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"V"</span><span class="op">)</span></span>
+<span><span class="va">vf2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"W"</span><span class="op">)</span></span>
+<span><span class="va">inner</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="reference/enclosing.html">ang</a></span><span class="op">(</span><span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">","</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cov.der</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="st">"dt"</span></span>
 <span><span class="va">ddt</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="st">"dt"</span></span>
 <span></span>
-<span><span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span> <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span><span class="va">eq</span><span class="op">*</span> <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -84,13 +86,13 @@
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Division automatically becomes \frac</span></span>
-<span><span class="va">X</span> <span class="op">/</span> <span class="va">Y</span>               <span class="co"># → \frac{X}{Y}</span></span>
+<span><span class="va">x</span> <span class="op">/</span> <span class="va">y</span>               <span class="co"># → \frac{x}{y}</span></span>
 <span></span>
 <span><span class="co"># Powers become superscripts</span></span>
-<span><span class="va">X</span><span class="op">^</span><span class="fl">2</span>                 <span class="co"># → X^{2}</span></span>
+<span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>                 <span class="co"># → x^{2}</span></span>
 <span></span>
 <span><span class="co"># Subscripts with under()</span></span>
-<span><span class="va">X</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/operators.html">under</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span>       <span class="co"># → X_{i}</span></span></code></pre></div>
+<span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/operators.html">under</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span>       <span class="co"># → x_{i}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_2-automatic-delimiter-sizing">2. <strong>Automatic Delimiter Sizing</strong>
@@ -98,9 +100,9 @@
 </h3>
 <p>No more <code>\left</code> and <code>\right</code> headaches!</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/enclosing.html">pths</a></span><span class="op">(</span><span class="va">X</span> <span class="op">/</span> <span class="va">Y</span><span class="op">)</span>         <span class="co"># Parentheses with auto-sizing</span></span>
-<span><span class="fu"><a href="reference/enclosing.html">ang</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">Y</span><span class="op">)</span>           <span class="co"># Angle brackets ⟨X,Y⟩</span></span>
-<span><span class="fu"><a href="reference/enclosing.html">sqbr</a></span><span class="op">(</span><span class="va">X</span> <span class="op">+</span> <span class="va">Y</span><span class="op">)</span>         <span class="co"># Square brackets [X+Y]</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/enclosing.html">pths</a></span><span class="op">(</span><span class="va">x</span> <span class="op">/</span> <span class="va">y</span><span class="op">)</span>         <span class="co"># Parentheses with auto-sizing</span></span>
+<span><span class="fu"><a href="reference/enclosing.html">ang</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>           <span class="co"># Angle brackets ⟨x,y⟩</span></span>
+<span><span class="fu"><a href="reference/enclosing.html">sqbr</a></span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="va">y</span><span class="op">)</span>         <span class="co"># Square brackets [x+y]</span></span>
 <span><span class="fu"><a href="reference/enclosing.html">br</a></span><span class="op">(</span><span class="va">condition</span><span class="op">)</span>       <span class="co"># Braces {condition}</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -115,7 +117,7 @@
 <span><span class="va">abs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"\\abs{"</span>, <span class="va">x</span>, <span class="st">"}"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Compose naturally</span></span>
-<span><span class="fu">exp_val</span><span class="op">(</span><span class="fu">sq</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">X</span> <span class="op">-</span> <span class="va">Y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>     <span class="co"># → 𝔼[(|X - Y|)²]</span></span></code></pre></div>
+<span><span class="fu">exp_val</span><span class="op">(</span><span class="fu">sq</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span>     <span class="co"># → 𝔼[(|x| - y)²]</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_4-multi-line-equations-made-simple">4. <strong>Multi-line Equations Made Simple</strong>
@@ -158,12 +160,12 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/attach.html" class="external-link">attach</a></span><span class="op">(</span><span class="va">common</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define components</span></span>
-<span><span class="va">sample_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"\\bar{X}"</span><span class="op">)</span></span>
+<span><span class="va">sample_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"\\bar{x}"</span><span class="op">)</span></span>
 <span><span class="va">sqrt</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"\\sqrt{"</span>, <span class="va">x</span>, <span class="st">"}"</span><span class="op">)</span></span>
 <span><span class="va">conv_distr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"\\overset{d}{\\rightarrow}"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Express the theorem</span></span>
-<span><span class="va">clt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="reference/enclosing.html">pths</a></span><span class="op">(</span><span class="va">sample_mean</span> <span class="op">-</span> <span class="va">mu</span><span class="op">)</span> <span class="op">/</span> <span class="va">sigma</span><span class="op">)</span> <span class="op">*</span> <span class="va">conv_distr</span> <span class="op">*</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"N(0,1)"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">clt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="reference/enclosing.html">pths</a></span><span class="op">(</span><span class="va">sample_mean</span> <span class="op">-</span> <span class="va">mu</span><span class="op">)</span> <span class="op">/</span> <span class="va">si</span><span class="op">)</span> <span class="op">*</span> <span class="va">conv_distr</span> <span class="op">*</span> <span class="fu"><a href="reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"N(0,1)"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="id_-learn-more">📚 Learn More<a class="anchor" aria-label="anchor" href="#id_-learn-more"></a>
@@ -187,7 +189,7 @@
 <li>📚 Course materials and textbooks</li>
 <li>🧮 Any document with serious mathematics</li>
 </ul>
-<p><strong>Stop fighting with LaTeX syntax. Start expressing your mathematics naturally with latexSymb!</strong></p>
+<p><strong>Stop fighting with LaTex syntax. Start expressing your mathematics naturally with latexSymb!</strong></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
