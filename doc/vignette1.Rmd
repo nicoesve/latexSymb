@@ -1,0 +1,111 @@
+---
+title: "Use R to Write LaTeX Code in R Markdown Documents"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use R to Write LaTeX Code in R Markdown Documents}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Technical reports written in R Markdown frequently incorporate mathematical symbols. 
+R Markdown supports this requirement through the inclusion of raw LaTeX code, 
+which is rendered by an appropriate LaTeX engine based on the desired output format.
+While this functionality is valuable, it presents certain challenges. 
+
+Writing LaTeX code can be cumbersome and often results in poor readability. 
+While `newcommand` can mitigate these issues, it is underutilized in practice.
+This package leverages the fact that R Markdown users are already working within the R environment, 
+enabling them to generate LaTeX code programmatically using familiar R syntax.  
+
+## Example
+
+The following example demonstrates this approach. 
+Consider the following equation, encountered in Riemannian geometry:
+
+$$
+\frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
+$$
+
+The traditional LaTeX implementation would be:
+```{latex}
+\frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
+```
+
+Using `latexSymb`, the same equation can be constructed programmatically. 
+Begin by creating objects of class `latex_symb` to represent the vector fields:
+
+```{r}
+library(latexSymb)
+data(common)
+attach(common)
+vf1 <- lsymb("V")
+vf2 <- lsymb("W")
+```
+
+Next, define R functions to represent the mathematical operations: the inner product, the covariant derivative, and the ordinary derivative:
+
+```{r}
+inner <- function(x, y) ang(lsymb(x, ",", y))
+cov.der <- function(x) lsymb("D", x) / "dt"
+ddt <- function(x) lsymb("d", x) / "dt"
+```
+
+Finally, combine these elements within an `equation` environment:
+
+```{r, results = "asis"}
+lenv(
+  "equation",
+  lsymb(
+    ddt(inner(vf1, vf2)),
+    eq,
+    inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
+  )
+) |> cat()
+```
+
+Note: Use `cat` rather than `print` to prevent the display of escaped backslashes.
+
+### Implementation Details
+
+This approach utilizes several key features of the `latexSymb` package. 
+
+The definition of `cov.der` demonstrates operator overloading in `latexSymb`. 
+The `/` operator is redefined such that when either argument is a `latex_symb` object, 
+it returns a new `latex_symb` object using the appropriate `\frac` command. 
+Similar overloading is implemented for `+`, `-`, `*`, and `^` operators. 
+The `under` function provides subscript functionality. 
+
+In the numerator of `cov.der`, `lsymb("D", x)` concatenates the string `"D"` 
+with the object `x`, returning a new `latex_symb` object. 
+
+The `ang` function automatically handles delimiter sizing for angle brackets, 
+eliminating the need for explicit `\left` and `\right` commands. 
+Similar functionality is provided by `br` (braces), `sqbr` (square brackets), and `pths` (parentheses). 
+
+The `lenv` function simplifies environment creation by automatically generating `\begin` and `\end` statements. 
+The second argument accepts a list or vector where each element represents a separate line. 
+For example, the equation could alternatively be formatted as:
+
+```{r, results = "asis"}
+lenv(
+  "align*",
+  c(
+    lsymb(ddt(inner(vf1, vf2)), "&=\\\\"),
+    lsymb("&=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))
+  )
+) |> cat()
+```
+
+The package also provides the `il` function, which wraps expressions in dollar signs 
+for inline mathematical content. 
+
+## Discussion
+
+While `latexSymb` may not substantially reduce code volume compared to raw LaTeX, 
+it enhances readability and reduces error likelihood. 
+The package enables users to express mathematical concepts semantically rather than syntactically. 
+
+The package is not restricted to R Markdown and may be particularly well-suited for `.Rtex` documents. 
+It is compatible with any format supported by `knitr`. 
+
+For complex equations, R's pipe operator can further enhance code organization and readability. 

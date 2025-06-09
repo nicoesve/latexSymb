@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Use R to Write LaTeX Code in R Markdown Documents</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Use R to Write LaTeX Code in R Markdown
+Documents</h1>
+
+
+
+<p>Technical reports written in R Markdown frequently incorporate
+mathematical symbols. R Markdown supports this requirement through the
+inclusion of raw LaTeX code, which is rendered by an appropriate LaTeX
+engine based on the desired output format. While this functionality is
+valuable, it presents certain challenges.</p>
+<p>Writing LaTeX code can be cumbersome and often results in poor
+readability. While <code>newcommand</code> can mitigate these issues, it
+is underutilized in practice. This package leverages the fact that R
+Markdown users are already working within the R environment, enabling
+them to generate LaTeX code programmatically using familiar R
+syntax.</p>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>The following example demonstrates this approach. Consider the
+following equation, encountered in Riemannian geometry:</p>
+<p><span class="math display">\[
+\frac{d}{dt} \left \langle V,W \right \rangle = \left \langle
+\frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right
+\rangle
+\]</span></p>
+<p>The traditional LaTeX implementation would be:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">\frac</span>{d}{dt} <span class="fu">\left</span> <span class="fu">\langle</span> V,W <span class="fu">\right</span> <span class="fu">\rangle</span> = <span class="fu">\left</span> <span class="fu">\langle</span> <span class="fu">\frac</span>{DV}{dt}, W <span class="fu">\right</span> <span class="fu">\rangle</span> + <span class="fu">\left</span> <span class="fu">\langle</span> V, <span class="fu">\frac</span>{DW}{dt} <span class="fu">\right</span> <span class="fu">\rangle</span></span></code></pre></div>
+<p>Using <code>latexSymb</code>, the same equation can be constructed
+programmatically. Begin by creating objects of class
+<code>latex_symb</code> to represent the vector fields:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(latexSymb)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">data</span>(common)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">attach</span>(common)</span></code></pre></div>
+<pre><code>## The following object is masked _by_ .GlobalEnv:
+## 
+##     n</code></pre>
+<pre><code>## The following objects are masked from common (pos = 3):
+## 
+##     al, be, bgs, ch, comma, Comps, de, des, endl, ep, eq, et, f, g, ga,
+##     geq, gt, h, i, indic, infty, Ints, io, j, k, ka, l, la, ldots, leq,
+##     lt, m, mapsto, minus, mu, n, Nats, neq, nu, om, om, ph, pi, plus,
+##     ps, quad, Rats, Reals, rh, ruler, si, ta, th, thus, times, to, up,
+##     x, xi, y, z, ze</code></pre>
+<pre><code>## The following objects are masked from common (pos = 4):
+## 
+##     al, be, bgs, ch, comma, Comps, de, des, endl, ep, eq, et, f, g, ga,
+##     geq, gt, h, i, indic, infty, Ints, io, j, k, ka, l, la, ldots, leq,
+##     lt, m, mapsto, minus, mu, n, Nats, neq, nu, om, om, ph, pi, plus,
+##     ps, quad, Rats, Reals, rh, ruler, si, ta, th, thus, times, to, up,
+##     x, xi, y, z, ze</code></pre>
+<pre><code>## The following object is masked from package:base:
+## 
+##     pi</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>vf1 <span class="ot">&lt;-</span> <span class="fu">lsymb</span>(<span class="st">&quot;V&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>vf2 <span class="ot">&lt;-</span> <span class="fu">lsymb</span>(<span class="st">&quot;W&quot;</span>)</span></code></pre></div>
+<p>Next, define R functions to represent the mathematical operations:
+the inner product, the covariant derivative, and the ordinary
+derivative:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>inner <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) <span class="fu">ang</span>(<span class="fu">lsymb</span>(x, <span class="st">&quot;,&quot;</span>, y))</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>cov.der <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">lsymb</span>(<span class="st">&quot;D&quot;</span>, x) <span class="sc">/</span> <span class="st">&quot;dt&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>ddt <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">lsymb</span>(<span class="st">&quot;d&quot;</span>, x) <span class="sc">/</span> <span class="st">&quot;dt&quot;</span></span></code></pre></div>
+<p>Finally, combine these elements within an <code>equation</code>
+environment:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">lenv</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="st">&quot;equation&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">lsymb</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="fu">ddt</span>(<span class="fu">inner</span>(vf1, vf2)),</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    eq,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="fu">inner</span>(<span class="fu">cov.der</span>(vf1), vf2) <span class="sc">+</span> <span class="fu">inner</span>(vf1, <span class="fu">cov.der</span>(vf2))</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  )</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">cat</span>()</span></code></pre></div>
+<p><span class="math display">\[\begin{equation}\frac{ d \langle V , W
+\rangle }{ dt } = \langle \frac{ D V }{ dt } , W \rangle + \langle V ,
+\frac{ D W }{ dt } \rangle\end{equation}\]</span></p>
+<p>Note: Use <code>cat</code> rather than <code>print</code> to prevent
+the display of escaped backslashes.</p>
+<div id="implementation-details" class="section level3">
+<h3>Implementation Details</h3>
+<p>This approach utilizes several key features of the
+<code>latexSymb</code> package.</p>
+<p>The definition of <code>cov.der</code> demonstrates operator
+overloading in <code>latexSymb</code>. The <code>/</code> operator is
+redefined such that when either argument is a <code>latex_symb</code>
+object, it returns a new <code>latex_symb</code> object using the
+appropriate <code>\frac</code> command. Similar overloading is
+implemented for <code>+</code>, <code>-</code>, <code>*</code>, and
+<code>^</code> operators. The <code>under</code> function provides
+subscript functionality.</p>
+<p>In the numerator of <code>cov.der</code>, <code>lsymb(&quot;D&quot;, x)</code>
+concatenates the string <code>&quot;D&quot;</code> with the object <code>x</code>,
+returning a new <code>latex_symb</code> object.</p>
+<p>The <code>ang</code> function automatically handles delimiter sizing
+for angle brackets, eliminating the need for explicit <code>\left</code>
+and <code>\right</code> commands. Similar functionality is provided by
+<code>br</code> (braces), <code>sqbr</code> (square brackets), and
+<code>pths</code> (parentheses).</p>
+<p>The <code>lenv</code> function simplifies environment creation by
+automatically generating <code>\begin</code> and <code>\end</code>
+statements. The second argument accepts a list or vector where each
+element represents a separate line. For example, the equation could
+alternatively be formatted as:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">lenv</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="st">&quot;align*&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="fu">lsymb</span>(<span class="fu">ddt</span>(<span class="fu">inner</span>(vf1, vf2)), <span class="st">&quot;&amp;=</span><span class="sc">\\\\</span><span class="st">&quot;</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="fu">lsymb</span>(<span class="st">&quot;&amp;=&quot;</span>, <span class="fu">inner</span>(<span class="fu">cov.der</span>(vf1), vf2) <span class="sc">+</span> <span class="fu">inner</span>(vf1, <span class="fu">cov.der</span>(vf2)))</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  )</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">cat</span>()</span></code></pre></div>
+<p><span class="math display">\[\begin{align*}\frac{ d \langle V , W
+\rangle }{ dt } &amp;=\\&amp;= \langle \frac{ D V }{ dt } , W \rangle +
+\langle V , \frac{ D W }{ dt } \rangle\end{align*}\]</span></p>
+<p>The package also provides the <code>il</code> function, which wraps
+expressions in dollar signs for inline mathematical content.</p>
+</div>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
+<p>While <code>latexSymb</code> may not substantially reduce code volume
+compared to raw LaTeX, it enhances readability and reduces error
+likelihood. The package enables users to express mathematical concepts
+semantically rather than syntactically.</p>
+<p>The package is not restricted to R Markdown and may be particularly
+well-suited for <code>.Rtex</code> documents. It is compatible with any
+format supported by <code>knitr</code>.</p>
+<p>For complex equations, R’s pipe operator can further enhance code
+organization and readability.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
