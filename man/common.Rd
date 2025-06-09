@@ -62,5 +62,13 @@
     \item{Comps}{latex_symb object whose repr is "\\\\mathbb\{C\}"}
     \item{indic}{latex_symb object whose repr is "\\\\mathbb\{1\}"}
     \item{infty}{latex_symb object whose repr is "\\\\infty"}
+    \item{comma}{latex_symb object whose repr is ","}
+    \item{endl}{latex_symb object whose repr is "\\\\\\\\"}
+    \item{thus}{latex_symb object whose repr is "\\\\Rightarrow"}
+    \item{minus}{latex_symb object whose repr is "-"}
+    \item{plus}{latex_symb object whose repr is "+"}
+    \item{times}{latex_symb object whose repr is "\\\\times"}
+    \item{quad}{latex_symb object whose repr is "\\\\quad"}
+    \item{ruler}{latex_symb object whose repr is "&"}
   }
 }

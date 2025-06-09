@@ -7,104 +7,105 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-Technical reports written in R Markdown usually include mathematical symbols. 
-R Markdown addresses that by supporting the inclussion of raw LaTeX code. 
-Depending on the desired output format, the code gets rendered by some LaTeX engine.
-This feature is very convenient. 
+Technical reports written in R Markdown frequently incorporate mathematical symbols. 
+R Markdown supports this requirement through the inclusion of raw LaTeX code, 
+which is rendered by an appropriate LaTeX engine based on the desired output format.
+While this functionality is valuable, it presents certain challenges. 
 
-The issue here is that writing LaTeX code can be cumbersome and the result is usually hard to read. 
-Although the use of `newcommand` can alleviate that, in practice people use it infrequently.
-The idea behind this package is that if you're writing an R Markdown report, you're already using R, 
-so you might as well use it to write your LaTeX code as well.  
+Writing LaTeX code can be cumbersome and often results in poor readability. 
+While `newcommand` can mitigate these issues, it is underutilized in practice.
+This package leverages the fact that R Markdown users are already working within the R environment, 
+enabling them to generate LaTeX code programmatically using familiar R syntax.  
 
 ## Example
 
-This is best explained through an example. 
+The following example demonstrates this approach. 
 Consider the following equation, encountered in Riemannian geometry:
 
 $$
 \frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
 $$
 
-The straightforward way to code that is:
+The traditional LaTeX implementation would be:
 ```{latex}
 \frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
 ```
 
-If you were to use `latexSymb`, you would proceed as follows instead. 
-First you would create objects of class `latex_symb` to represent the vector fields:
+Using `latexSymb`, the same equation can be constructed programmatically. 
+Begin by creating objects of class `latex_symb` to represent the vector fields:
 
 ```{r}
 library(latexSymb)
+data(common)
+attach(common)
 vf1 <- lsymb("V")
 vf2 <- lsymb("W")
 ```
 
-Then you would write R functions to represent the mathematical concepts being used: the inner product, the covariant derivative and the ordinary derivative:
+Next, define R functions to represent the mathematical operations: the inner product, the covariant derivative, and the ordinary derivative:
 
 ```{r}
-inner <- function(x,y) ang(lsymb(x, ",", y))
-cov.der <- function(x) lsymb("D", x)/"dt"
-ddt <- function(x) lsymb("d", x)/"dt"
+inner <- function(x, y) ang(lsymb(x, ",", y))
+cov.der <- function(x) lsymb("D", x) / "dt"
+ddt <- function(x) lsymb("d", x) / "dt"
 ```
 
-Then you would put everything in an `equation` environment:
+Finally, combine these elements within an `equation` environment:
 
 ```{r, results = "asis"}
-lenv("equation", 
-    lsymb(
-          ddt(inner(vf1, vf2)), 
-          "=", 
-          inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
-    )
+lenv(
+  "equation",
+  lsymb(
+    ddt(inner(vf1, vf2)),
+    eq,
+    inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
+  )
 ) |> cat()
 ```
 
-Notice that you need to `cat` instead of `print` to avoid double backslashes.
+Note: Use `cat` rather than `print` to prevent the display of escaped backslashes.
 
-### Unpacking
+### Implementation Details
 
-Let us unpack all of this. 
+This approach utilizes several key features of the `latexSymb` package. 
 
-Notice first that in the definition of `cov.der` an important feature is being used. 
-Namely, the `/` function is overwritten by `latexSymb` so that if either of its arguments 
-are objects of class `latex_symb`, the output is another object of that class 
-that uses `frac` as you would expect. 
-This is also done with `+`, `-`, `*` and `^`. 
-Additionally, `under` adds support for the use of subscripts. 
+The definition of `cov.der` demonstrates operator overloading in `latexSymb`. 
+The `/` operator is redefined such that when either argument is a `latex_symb` object, 
+it returns a new `latex_symb` object using the appropriate `\frac` command. 
+Similar overloading is implemented for `+`, `-`, `*`, and `^` operators. 
+The `under` function provides subscript functionality. 
 
-Also, in the numerator of `cov.der`, `lsymb("D", x)` concatenates the string `"D"` 
-and the object `x`, and wraps the result in a new `latex_symb` object. 
+In the numerator of `cov.der`, `lsymb("D", x)` concatenates the string `"D"` 
+with the object `x`, returning a new `latex_symb` object. 
 
-Further, there's the use of the `latexSymb` function `ang`, which provides the dynamic enclosing for 
-the inner product, thus avoiding the need to write `left` and `right`. 
-The functions `br`, `sqbr` and `pths` do the same for braces, square brackets and parentheses respectively. 
+The `ang` function automatically handles delimiter sizing for angle brackets, 
+eliminating the need for explicit `\left` and `\right` commands. 
+Similar functionality is provided by `br` (braces), `sqbr` (square brackets), and `pths` (parentheses). 
 
-Finally, there is the function `lenv` that spares the user from writing `begin` and `end`. 
-The second argument is a list or a vector, whose components represent different lines. 
-So, for instance, we could have written also
+The `lenv` function simplifies environment creation by automatically generating `\begin` and `\end` statements. 
+The second argument accepts a list or vector where each element represents a separate line. 
+For example, the equation could alternatively be formatted as:
 
 ```{r, results = "asis"}
-lenv("align*", 
-     c(
-       lsymb(ddt(inner(vf1, vf2)), "&=\\\\"),
-       lsymb("&=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))
-     )
+lenv(
+  "align*",
+  c(
+    lsymb(ddt(inner(vf1, vf2)), "&=\\\\"),
+    lsymb("&=", inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2)))
+  )
 ) |> cat()
 ```
 
-`latex_symb` also exposes `il`, which surrounds expressions in dollar signs, 
-for inline math environments. 
+The package also provides the `il` function, which wraps expressions in dollar signs 
+for inline mathematical content. 
 
 ## Discussion
 
-On the whole, `latexSymb` may not significantly reduce the amount of code
-users have to write compared to raw LaTeX. 
-But I do think it makes it more readable and hence less prone to errors. 
-Users can mostly write what they mean, not what they want to see. 
+While `latexSymb` may not substantially reduce code volume compared to raw LaTeX, 
+it enhances readability and reduces error likelihood. 
+The package enables users to express mathematical concepts semantically rather than syntactically. 
 
-Additionally, `latexSymb` is not limited to RMarkdown. 
-Actually, it probably makes more sense in `.Rtex` documents. 
-In any case, any format that `knit` can handle will do. 
+The package is not restricted to R Markdown and may be particularly well-suited for `.Rtex` documents. 
+It is compatible with any format supported by `knitr`. 
 
-Finally, for very complicated equations, R's piping should make things even more readable. 
+For complex equations, R's pipe operator can further enhance code organization and readability. 

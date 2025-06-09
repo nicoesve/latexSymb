@@ -1,13 +1,13 @@
 Package: latexSymb
 Type: Package
-Title: Write Equations in a Way that You Can Read
-Version: 0.4.2
-Date: 2024-08-27
+Title: R Functions for Readable LaTeX Mathematical Expressions
+Version: 1.0.0
+Date: 2025-06-09
 Authors@R: c(person("Nicolas", "Escobar", role = c("aut", "cre"), email = "nescoba@iu.edu"))
 Author: Nicolas Escobar [aut, cre]
 Maintainer: Nicolas Escobar <nescoba@iu.edu>
-Description: Utilities to help you write 'LaTeX' in a more readable way. Instead of using plain code or a series of 'newcommand' statements, use 'R' functions. You will be able to write what you mean and make fewer mistakes.  
-License: GPL(>= 3)
+Description: Build complex 'LaTeX' mathematical expressions using intuitive 'R' functions. Replace error-prone 'LaTeX' syntax with readable, composable functions that make mathematical typesetting straightforward and maintainable.  
+License: GPL(>= 3) + file LICENSE
 Encoding: UTF-8
 VignetteBuilder: knitr, rmarkdown
 Depends: R (>= 4.1.0), purrr
@@ -18,3 +18,4 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://nicoesve.github.io/latexSymb/
 BugReports: https://github.com/nicoesve/latexSymb/issues
+RoxygenNote: 7.3.2
