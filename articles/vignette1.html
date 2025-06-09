@@ -8,8 +8,8 @@
 <title>Use R to Write LaTeX Code in R Markdown Documents • latexSymb</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Use R to Write LaTeX Code in R Markdown Documents">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">latexSymb</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/vignette1.html">Use R to Write LaTeX Code in R Markdown Documents</a></li>
+<li><a class="dropdown-item" href="../articles/advanced_usage.html">Advanced Usage of latexSymb: Building Complex Mathematical Documents</a></li>
+    <li><a class="dropdown-item" href="../articles/vignette1.html">Use R to Write LaTeX Code in R Markdown Documents</a></li>
   </ul>
 </li>
       </ul>
@@ -64,28 +65,29 @@
 
     
     
-<p>Technical reports written in R Markdown usually include mathematical
-symbols. R Markdown addresses that by supporting the inclussion of raw
-LaTeX code. Depending on the desired output format, the code gets
-rendered by some LaTeX engine. This feature is very convenient.</p>
-<p>The issue here is that writing LaTeX code can be cumbersome and the
-result is usually hard to read. Although the use of
-<code>newcommand</code> can alleviate that, in practice people use it
-infrequently. The idea behind this package is that if you’re writing an
-R Markdown report, you’re already using R, so you might as well use it
-to write your LaTeX code as well.</p>
+<p>Technical reports written in R Markdown frequently incorporate
+mathematical symbols. R Markdown supports this requirement through the
+inclusion of raw LaTeX code, which is rendered by an appropriate LaTeX
+engine based on the desired output format. While this functionality is
+valuable, it presents certain challenges.</p>
+<p>Writing LaTeX code can be cumbersome and often results in poor
+readability. While <code>newcommand</code> can mitigate these issues, it
+is underutilized in practice. This package leverages the fact that R
+Markdown users are already working within the R environment, enabling
+them to generate LaTeX code programmatically using familiar R
+syntax.</p>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is best explained through an example. Consider the following
-equation, encountered in Riemannian geometry:</p>
+<p>The following example demonstrates this approach. Consider the
+following equation, encountered in Riemannian geometry:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mrow><mo stretchy="true" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mi>W</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">⟨</mo><mfrac><mrow><mi>D</mi><mi>V</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>,</mo><mi>W</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mfrac><mrow><mi>D</mi><mi>W</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo stretchy="true" form="postfix">⟩</mo></mrow></mrow><annotation encoding="application/x-tex">
 \frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
 </annotation></semantics></math></p>
-<p>The straightforward way to code that is:</p>
+<p>The traditional LaTeX implementation would be:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">\frac</span>{d}{dt} <span class="fu">\left</span> <span class="fu">\langle</span> V,W <span class="fu">\right</span> <span class="fu">\rangle</span> = <span class="fu">\left</span> <span class="fu">\langle</span> <span class="fu">\frac</span>{DV}{dt}, W <span class="fu">\right</span> <span class="fu">\rangle</span> + <span class="fu">\left</span> <span class="fu">\langle</span> V, <span class="fu">\frac</span>{DW}{dt} <span class="fu">\right</span> <span class="fu">\rangle</span></span></code></pre></div>
-<p>If you were to use <code>latexSymb</code>, you would proceed as
-follows instead. First you would create objects of class
+<p>Using <code>latexSymb</code>, the same equation can be constructed
+programmatically. Begin by creating objects of class
 <code>latex_symb</code> to represent the vector fields:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nicoesve.github.io/latexSymb/">latexSymb</a></span><span class="op">)</span></span></code></pre></div>
@@ -96,78 +98,86 @@ follows instead. First you would create objects of class
 <span><span class="co">## </span></span>
 <span><span class="co">##     -, *, /, ^, +</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">common</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/attach.html" class="external-link">attach</a></span><span class="op">(</span><span class="va">common</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## The following object is masked from package:base:</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     pi</span></span></code></pre>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"V"</span><span class="op">)</span></span>
 <span><span class="va">vf2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"W"</span><span class="op">)</span></span></code></pre></div>
-<p>Then you would write R functions to represent the mathematical
-concepts being used: the inner product, the covariant derivative and the
-ordinary derivative:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">inner</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span> <span class="fu"><a href="../reference/enclosing.html">ang</a></span><span class="op">(</span><span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">","</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cov.der</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="va">x</span><span class="op">)</span><span class="op">/</span><span class="st">"dt"</span></span>
-<span><span class="va">ddt</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="va">x</span><span class="op">)</span><span class="op">/</span><span class="st">"dt"</span></span></code></pre></div>
-<p>Then you would put everything in an <code>equation</code>
+<p>Next, define R functions to represent the mathematical operations:
+the inner product, the covariant derivative, and the ordinary
+derivative:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">inner</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="../reference/enclosing.html">ang</a></span><span class="op">(</span><span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">","</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cov.der</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="st">"dt"</span></span>
+<span><span class="va">ddt</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="st">"dt"</span></span></code></pre></div>
+<p>Finally, combine these elements within an <code>equation</code>
 environment:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/environments.html">lenv</a></span><span class="op">(</span><span class="st">"equation"</span>, </span>
-<span>    <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span></span>
-<span>          <span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>          <span class="st">"="</span>, </span>
-<span>          <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/environments.html">lenv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"equation"</span>,</span>
+<span>  <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span></span>
+<span>    <span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="va">eq</span>,</span>
+<span>    <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>d</mi><mo stretchy="false" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mi>W</mi><mo stretchy="false" form="postfix">⟩</mo></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mo stretchy="false" form="prefix">⟨</mo><mfrac><mrow><mi>D</mi><mi>V</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>,</mo><mi>W</mi><mo stretchy="false" form="postfix">⟩</mo><mo>+</mo><mo stretchy="false" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mfrac><mrow><mi>D</mi><mi>W</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo stretchy="false" form="postfix">⟩</mo></mrow><annotation encoding="application/x-tex">\begin{equation}\frac{ d \langle V , W \rangle }{ dt } = \langle \frac{ D V }{ dt } , W \rangle + \langle V , \frac{ D W }{ dt } \rangle\end{equation}</annotation></semantics></math></p>
-<p>Notice that you need to <code>cat</code> instead of
-<code>print</code> to avoid double backslashes.</p>
+<p>Note: Use <code>cat</code> rather than <code>print</code> to prevent
+the display of escaped backslashes.</p>
 <div class="section level3">
-<h3 id="unpacking">Unpacking<a class="anchor" aria-label="anchor" href="#unpacking"></a>
+<h3 id="implementation-details">Implementation Details<a class="anchor" aria-label="anchor" href="#implementation-details"></a>
 </h3>
-<p>Let us unpack all of this.</p>
-<p>Notice first that in the definition of <code>cov.der</code> an
-important feature is being used. Namely, the <code>/</code> function is
-overwritten by <code>latexSymb</code> so that if either of its arguments
-are objects of class <code>latex_symb</code>, the output is another
-object of that class that uses <code>frac</code> as you would expect.
-This is also done with <code>+</code>, <code>-</code>, <code>*</code>
-and <code>^</code>. Additionally, <code>under</code> adds support for
-the use of subscripts.</p>
-<p>Also, in the numerator of <code>cov.der</code>,
-<code>lsymb("D", x)</code> concatenates the string <code>"D"</code> and
-the object <code>x</code>, and wraps the result in a new
-<code>latex_symb</code> object.</p>
-<p>Further, there’s the use of the <code>latexSymb</code> function
-<code>ang</code>, which provides the dynamic enclosing for the inner
-product, thus avoiding the need to write <code>left</code> and
-<code>right</code>. The functions <code>br</code>, <code>sqbr</code> and
-<code>pths</code> do the same for braces, square brackets and
-parentheses respectively.</p>
-<p>Finally, there is the function <code>lenv</code> that spares the user
-from writing <code>begin</code> and <code>end</code>. The second
-argument is a list or a vector, whose components represent different
-lines. So, for instance, we could have written also</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/environments.html">lenv</a></span><span class="op">(</span><span class="st">"align*"</span>, </span>
-<span>     <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>       <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span>, <span class="st">"&amp;=\\\\"</span><span class="op">)</span>,</span>
-<span>       <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"&amp;="</span>, <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>     <span class="op">)</span></span>
+<p>This approach utilizes several key features of the
+<code>latexSymb</code> package.</p>
+<p>The definition of <code>cov.der</code> demonstrates operator
+overloading in <code>latexSymb</code>. The <code>/</code> operator is
+redefined such that when either argument is a <code>latex_symb</code>
+object, it returns a new <code>latex_symb</code> object using the
+appropriate <code>\frac</code> command. Similar overloading is
+implemented for <code>+</code>, <code>-</code>, <code>*</code>, and
+<code>^</code> operators. The <code>under</code> function provides
+subscript functionality.</p>
+<p>In the numerator of <code>cov.der</code>, <code>lsymb("D", x)</code>
+concatenates the string <code>"D"</code> with the object <code>x</code>,
+returning a new <code>latex_symb</code> object.</p>
+<p>The <code>ang</code> function automatically handles delimiter sizing
+for angle brackets, eliminating the need for explicit <code>\left</code>
+and <code>\right</code> commands. Similar functionality is provided by
+<code>br</code> (braces), <code>sqbr</code> (square brackets), and
+<code>pths</code> (parentheses).</p>
+<p>The <code>lenv</code> function simplifies environment creation by
+automatically generating <code>\begin</code> and <code>\end</code>
+statements. The second argument accepts a list or vector where each
+element represents a separate line. For example, the equation could
+alternatively be formatted as:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/environments.html">lenv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"align*"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="fu">ddt</span><span class="op">(</span><span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="va">vf2</span><span class="op">)</span><span class="op">)</span>, <span class="st">"&amp;=\\\\"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/main.html">lsymb</a></span><span class="op">(</span><span class="st">"&amp;="</span>, <span class="fu">inner</span><span class="op">(</span><span class="fu">cov.der</span><span class="op">(</span><span class="va">vf1</span><span class="op">)</span>, <span class="va">vf2</span><span class="op">)</span> <span class="op">+</span> <span class="fu">inner</span><span class="op">(</span><span class="va">vf1</span>, <span class="fu">cov.der</span><span class="op">(</span><span class="va">vf2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mo stretchy="false" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mi>W</mi><mo stretchy="false" form="postfix">⟩</mo></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo stretchy="false" form="prefix">⟨</mo><mfrac><mrow><mi>D</mi><mi>V</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>,</mo><mi>W</mi><mo stretchy="false" form="postfix">⟩</mo><mo>+</mo><mo stretchy="false" form="prefix">⟨</mo><mi>V</mi><mo>,</mo><mfrac><mrow><mi>D</mi><mi>W</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo stretchy="false" form="postfix">⟩</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}\frac{ d \langle V , W \rangle }{ dt } &amp;=\\&amp;= \langle \frac{ D V }{ dt } , W \rangle + \langle V , \frac{ D W }{ dt } \rangle\end{align*}</annotation></semantics></math></p>
-<p><code>latex_symb</code> also exposes <code>il</code>, which surrounds
-expressions in dollar signs, for inline math environments.</p>
+<p>The package also provides the <code>il</code> function, which wraps
+expressions in dollar signs for inline mathematical content.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="discussion">Discussion<a class="anchor" aria-label="anchor" href="#discussion"></a>
 </h2>
-<p>On the whole, <code>latexSymb</code> may not significantly reduce the
-amount of code users have to write compared to raw LaTeX. But I do think
-it makes it more readable and hence less prone to errors. Users can
-mostly write what they mean, not what they want to see.</p>
-<p>Additionally, <code>latexSymb</code> is not limited to RMarkdown.
-Actually, it probably makes more sense in <code>.Rtex</code> documents.
-In any case, any format that <code>knit</code> can handle will do.</p>
-<p>Finally, for very complicated equations, R’s piping should make
-things even more readable.</p>
+<p>While <code>latexSymb</code> may not substantially reduce code volume
+compared to raw LaTeX, it enhances readability and reduces error
+likelihood. The package enables users to express mathematical concepts
+semantically rather than syntactically.</p>
+<p>The package is not restricted to R Markdown and may be particularly
+well-suited for <code>.Rtex</code> documents. It is compatible with any
+format supported by <code>knitr</code>.</p>
+<p>For complex equations, R’s pipe operator can further enhance code
+organization and readability.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -180,7 +190,7 @@ things even more readable.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
