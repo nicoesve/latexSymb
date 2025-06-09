@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include = FALSE}
 library(latexSymb)
 data(common)
 attach(common)
@@ -53,14 +53,18 @@ measure <- lsymb("\\mu")
 dist <- function(x, y) lsymb("d") * pths(x * comma * y)
 ```
 
-Then in your .Rmd file:
+Then, use a separate .Rmd to write the body of your document. In that file, set:
 
 ```
 knitr::opts_chunk$set(results = "asis", echo = FALSE)
 source("my_symbols.R")
 ```
 
+to make sure that the LaTeX code gets correctly rendered.
+
 ## Creating Powerful Helper Functions
+
+You can use `latexSymb` to handle complicated mathematical expressions. The following patterns can be helpful.
 
 ### Pattern 1: Building Complex Expressions
 
@@ -85,11 +89,11 @@ X <- lsymb("X")
 Y <- lsymb("Y")
 ```
 
-Then you can create expressions like `exp_val(sq(abs(X - Y))) |> il()` and `exp_val(X * indic(Y > 0)) |> il()`.
+Then you can create expressions like `exp_val(sq(abs(X - Y))) |> il()` to obtain `r exp_val(sq(abs(X - Y))) |> il()` and `exp_val(X * indic(Y > 0)) |> il()` for `r xp_val(X * indic(Y > 0)) |> il()`.
 
 ### Pattern 2: Multi-line Equation Builders
 
-The most powerful pattern uses lists and the `lenv()` function:
+This pattern uses lists and the `lenv()` function. Each element of the list corresponds to a row of your displayed expression:
 
 ```{r}
 # Build a proof step by step
@@ -103,53 +107,24 @@ proof_steps <- list(
 `r proof_steps`
 
 
-## Best Practices
-
-### 1. Consistent Naming Conventions
-
-```{r}
-# Good: Clear, descriptive names
-expectation_X <- exp_val(X)
-variance_X <- exp_val(sq(X - exp_val(X)))
-
-# Bad: Unclear abbreviations
-# e_x <- exp_val(X)
-# v_x <- exp_val(sq(X - exp_val(X)))
-```
-
-### 2. Modular Function Design
-
-```{r}
-# Base functions that can be composed
-norm <- function(x) lsymb("\\|", x, "\\|")
-inner_prod <- function(x, y) lsymb("\\langle ", x, ", ", y, " \\rangle")
-
-# Composed functions
-induced_norm <- function(x) {
-  sqrt(inner_prod(x, x))
-}
-```
-
-
 ## Complex Example: Statistical Proof
 
 Here's how these techniques combine in practice:
 
 ```{r}
 # Setup
-n <- lsymb("n")
-X_i <- lsymb("X") |> under(i)
-X_bar <- lsymb("\\bar{X}")
-S_n <- lsymb("S") |> under(n)
-conv_distr <- lsymb("\\xrightarrow{d}")
+sample_size <- lsymb("n")
+observation <- lsymb("X") |> under(i)
+sample_mean <- lsymb("\\bar{X}")
+conv_distr <- lsymb("\\overset{d}{\\rightarrow}")
 sqrt <- function(x) lsymb("\\sqrt{", x, "}")
 
 # Build a Central Limit Theorem statement
 clt_statement <- list(
-  ruler * sqrt(n) * pths(X_bar - mu) / si *
+  ruler * sqrt(sample_size) * (pths(sample_mean - mu) / si) *
     conv_distr * lsymb("N(0,1)") * endl,
   ruler * lsymb("\\text{where }") *
-    X_bar * eq * (1 / n) * Sum(X_i, from = i * eq * 1, to = n)
+    sample_mean * eq * (1 / sample_size) * Sum(observation, from = i * eq * 1, to = sample_size)
 ) |>
   lenv("align*", rows = _)
 ```
@@ -163,6 +138,3 @@ By organizing your code into separate files, creating reusable functions, and fo
 1. **Separate concerns**: Keep symbol definitions in .R files
 2. **Build abstractions**: Create functions for repeated patterns
 3. **Compose functions**: Build complex expressions from simple parts
-4. **Document thoroughly**: Make your code self-explanatory
-
-This approach scales well from simple documents to entire textbooks or research papers.

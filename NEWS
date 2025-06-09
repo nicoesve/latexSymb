@@ -1,3 +1,12 @@
+# latexSymb 1.0.0
+
+## Major Release
+
+- Package is now stable and ready for production use
+- Added comprehensive vignettes including advanced usage guide
+- Added `ang()` function for angle bracket notation
+- Improved documentation and examples throughout
+
 # latexSymb 0.4.2
 
 ## New Features
