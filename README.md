@@ -1,7 +1,5 @@
 # latexSymb
 
-> **Write LaTeX math like you think — not like you typeset**
-
 Transform complex LaTeX mathematical expressions into readable, composable R code. Instead of wrestling with backslashes and braces, express your mathematics naturally using familiar R syntax.
 
 ## ✨ Why latexSymb?
