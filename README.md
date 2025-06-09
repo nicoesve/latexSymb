@@ -1,21 +1,23 @@
 # latexSymb
 
-Transform complex LaTeX mathematical expressions into readable, composable R code. Instead of wrestling with backslashes and braces, express your mathematics naturally using familiar R syntax.
+Transform complex LaTex mathematical expressions into readable, composable R code. Instead of wrestling with backslashes and braces, express your mathematics naturally using familiar R syntax.
 
 ## ✨ Why latexSymb?
 
-### Before (Raw LaTeX) 😓
+### Before (Raw LaTex) 😓
 ```latex
 \frac{d}{dt} \left \langle V,W \right \rangle = \left \langle \frac{DV}{dt}, W \right \rangle + \left \langle V, \frac{DW}{dt} \right \rangle
 ```
 
 ### After (latexSymb) 🎉
 ```r
+vf1 <- lsymb("V")
+vf2 <- lsymb("W")
 inner <- function(x, y) ang(lsymb(x, ",", y))
 cov.der <- function(x) lsymb("D", x) / "dt"
 ddt <- function(x) lsymb("d", x) / "dt"
 
-ddt(inner(vf1, vf2)) == inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
+ddt(inner(vf1, vf2)) *eq* inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
 ```
 
 ## 🚀 Key Features
@@ -23,21 +25,21 @@ ddt(inner(vf1, vf2)) == inner(cov.der(vf1), vf2) + inner(vf1, cov.der(vf2))
 ### 1. **Natural Mathematical Syntax**
 ```r
 # Division automatically becomes \frac
-X / Y               # → \frac{X}{Y}
+x / y               # → \frac{x}{y}
 
 # Powers become superscripts
-X^2                 # → X^{2}
+x^2                 # → x^{2}
 
 # Subscripts with under()
-X |> under(i)       # → X_{i}
+x |> under(i)       # → x_{i}
 ```
 
 ### 2. **Automatic Delimiter Sizing**
 No more `\left` and `\right` headaches!
 ```r
-pths(X / Y)         # Parentheses with auto-sizing
-ang(X, Y)           # Angle brackets ⟨X,Y⟩
-sqbr(X + Y)         # Square brackets [X+Y]
+pths(x / y)         # Parentheses with auto-sizing
+ang(x, y)           # Angle brackets ⟨x,y⟩
+sqbr(x + y)         # Square brackets [x+y]
 br(condition)       # Braces {condition}
 ```
 
@@ -50,7 +52,7 @@ sq <- function(x) pths(x)^2
 abs <- function(x) lsymb("\\abs{", x, "}")
 
 # Compose naturally
-exp_val(sq(abs(X - Y)))     # → 𝔼[(|X - Y|)²]
+exp_val(sq(abs(x) - y))     # → 𝔼[(|x| - y)²]
 ```
 
 ### 4. **Multi-line Equations Made Simple**
@@ -90,12 +92,12 @@ data(common)
 attach(common)
 
 # Define components
-sample_mean <- lsymb("\\bar{X}")
+sample_mean <- lsymb("\\bar{x}")
 sqrt <- function(x) lsymb("\\sqrt{", x, "}")
 conv_distr <- lsymb("\\overset{d}{\\rightarrow}")
 
 # Express the theorem
-clt <- sqrt(n) * (pths(sample_mean - mu) / sigma) * conv_distr * lsymb("N(0,1)")
+clt <- sqrt(n) * (pths(sample_mean - mu) / si) * conv_distr * lsymb("N(0,1)")
 ```
 
 ## 📚 Learn More
@@ -111,6 +113,6 @@ clt <- sqrt(n) * (pths(sample_mean - mu) / sigma) * conv_distr * lsymb("N(0,1)")
 - 📚 Course materials and textbooks
 - 🧮 Any document with serious mathematics
 
-**Stop fighting with LaTeX syntax. Start expressing your mathematics naturally with latexSymb!**
+**Stop fighting with LaTex syntax. Start expressing your mathematics naturally with latexSymb!**
 
 
